@@ -5,14 +5,17 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 
+import { ViewTransitions } from 'astro:transitions';
+
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
+		<ViewTransitions />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -29,10 +32,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
-				width: 720px;
+				width: 1080px;
 				max-width: calc(100% - 2em);
 				margin: auto;
-				padding: 1em;
+				padding: 0.5em;
 				color: rgb(var(--gray-dark));
 			}
 			.title {
@@ -42,11 +45,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				line-height: 1;
 			}
 			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
+				margin: 0.5em 0 0.5em 0;
 			}
 			.last-updated-on {
 				font-style: italic;
@@ -63,7 +62,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 				<div class="prose">
 					<div class="title">
-						<div class="date">
+						<div class="postmetadata">
 							<FormattedDate date={pubDate} />
 							{
 								updatedDate && (
@@ -71,6 +70,11 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 										Last updated on <FormattedDate date={updatedDate} />
 									</div>
 								)
+							}
+							{
+								tags.map((tag) => (
+								<div class="tags">{tag}</div>
+								))
 							}
 						</div>
 						<h1>{title}</h1>
