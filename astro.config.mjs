@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://tomtana.com',
+	site: 'https://tomtan-dev',
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		shikiConfig: {

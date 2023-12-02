@@ -74,7 +74,7 @@ const posts = (await getCollection('blog')).sort(
 			<section>
 				<ul>
 					{
-						posts.map((post) => (
+						posts.map((post) => (post.data.draft == null || post.data.draft == false) && (
 							<li>
 								<a href={`/blog/${post.slug}/`}>
 									{
@@ -94,7 +94,6 @@ const posts = (await getCollection('blog')).sort(
 								</a>
 							</li>
 						))
-					}
 				</ul>
 			</section>
 		</main>

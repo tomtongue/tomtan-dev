@@ -1,4 +1,4 @@
-# tomtana.com
+# tomtan.dev
 
 This is my portfolio built with Astro and hosted on Vercel. The page is based on the [Astro blog template](https://astro.build/themes/details/blog/).
 
