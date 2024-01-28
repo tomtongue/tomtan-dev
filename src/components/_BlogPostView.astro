@@ -1,7 +1,7 @@
 ---
 import { DEFAULT_HERO_IMAGE } from '../consts';
 import { getCollection } from 'astro:content';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 
 import FormattedDate from './FormattedDate.astro';
 
@@ -13,7 +13,7 @@ const posts = (await getCollection('blog')).sort(
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<ViewTransitions />
+		<ClientRouter />
 		<style>
 			main {
 				width: 1080px;

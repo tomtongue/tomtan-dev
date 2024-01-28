@@ -4,14 +4,18 @@
 import '../styles/global.css';
 
 interface Props {
-	title: string;
-	description: string;
+	title?: string | undefined;
+	description?: string | undefined;
 	image?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = 'tomtana_com_icon.png' } = Astro.props;
+const { 
+	title = 'tomtan.dev', 
+	description = 'tomtan personal website', 
+	image = 'tomtana_com_icon.png' 
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -41,3 +45,25 @@ const { title, description, image = 'tomtana_com_icon.png' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<script is:inline>
+	// This code is inlined in the head to make dark mode instant & blocking.
+	const getThemePreference = () => {
+		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+			return localStorage.getItem('theme');
+		}
+		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	};
+	const isDark = getThemePreference() === 'dark';
+	document.documentElement.classList[isDark ? 'add' : 'remove']('theme-dark');
+
+	if (typeof localStorage !== 'undefined') {
+		// Watch the document element and persist user preference when it changes.
+		const observer = new MutationObserver(() => {
+			const isDark = document.documentElement.classList.contains('theme-dark');
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		});
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+	}
+</script>
+

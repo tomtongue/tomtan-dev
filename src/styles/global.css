@@ -13,6 +13,8 @@
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
+	--title-bg: rgba(255, 255, 255, 80%);
+	--title-color: rgb(15, 18, 25);
 }
 
 body {
@@ -25,14 +27,14 @@ body {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	color: rgb(var(--gray-dark));
-	font-size: 1.1em;
+	font-size: 1.0em;
 	line-height: 1.5;
 }
 main {
 	width: 1152px;
 	max-width: calc(100% - 2em);
 	margin: auto;
-	padding: 3em 1em;
+	padding: 1em 1em;
 }
 h1,
 h2,
@@ -45,19 +47,19 @@ h6 {
 	line-height: 1.2;
 }
 h1 {
-	font-size: 2.5em;
-}
-h2 {
 	font-size: 2.0em;
 }
-h3 {
-	font-size: 1.7em;
+h2 {
+	font-size: 1.8em;
 }
-h4 {
+h3 {
 	font-size: 1.5em;
 }
-h5 {
+h4 {
 	font-size: 1.3em;
+}
+h5 {
+	font-size: 1.0em;
 }
 strong,
 b {
@@ -70,10 +72,10 @@ a:hover {
 	color: var(--accent);
 }
 p {
-	margin-bottom: 1em;
+	margin-bottom: 0.5em;
 }
 .prose p {
-	margin-bottom: 2em;
+	margin-bottom: 0.5em;
 }
 textarea {
 	width: 100%;
@@ -157,6 +159,7 @@ hr {
 }
 
 .postmetadata {
+	text-align: center;
 	margin: 0;
 	color: rgb(var(--gray));
 }
