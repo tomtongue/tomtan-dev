@@ -2,6 +2,7 @@
 title: 'Revisit all Iceberg queries'
 description: 'Run all Iceberg queries such as DDLs, Reads, Writes and Procedures and review the results'
 pubDate: 'Dec. 4 2023'
+heroImage: '/blog/2023-12-04.png'
 tags: ['iceberg']
 ---
 
@@ -33,6 +34,7 @@ In this blog post, we visit all Iceberg APIs via Spark and review the results. S
         * `migrate`
         * `add_files`
         * `register_table`
+        * `fast_forward`
         * Delta Lake table migration
 
 
@@ -311,7 +313,7 @@ spark.sql(s"""
 REPLACE TABLE $catalog.$db.$tbl
 USING iceberg
 PARTITIONED BY (year, month, day)
-TBLPROPERTIES(''='')
+TBLPROPERTIES('key'='value')
 AS SELECT * FROM tmp
 """)
 
@@ -421,12 +423,11 @@ spark.sql(s"""
 */
 ```
 
-
 #### `add_files`
 
 ```scala
 spark.sql(s"""
-    CALL hive_catalog.system.add_files(
+    CALL $catalog.system.add_files(
         table => 'db.spark_tbl', 
         backup_table_name => 'spark_tbl_backup')
 """)
@@ -436,9 +437,9 @@ spark.sql(s"""
 
 ```scala
 spark.sql(s"""
-    CALL glue_catalog.system.register_table (
+    CALL $catalog.system.register_table (
         table => 'db.tbl',
-        metadata_file => '/path/to/metadata.json'
+        metadata_file => 's3://bucket/path/to/metadata.json'
     )
 """)
 ```
@@ -460,6 +461,50 @@ DeltaLakeToIcebergMigrationActionsProvider.defaultActions()
     .tableProperty("key", "value")
     .execute()
 
+```
+
+### Branching and Tagging
+#### `fast_forward` (supported in Iceberg 1.4.0+)
+
+```scala
+/* Preparation
+spark.sql(s"ALTER TABLE $catalog.$db.$tbl CREATE BRANCH stg RETAIN 5 DAYS WITH SNAPSHOT RETENTION 3 DAYS")
+spark.sql(s"SET spark.wap.branch = stg")
+
+spark.sql(s"SELECT * FROM $catalog.$db.$tbl").show(false)
++---+----+
+|id |name|
++---+----+
+|3  |main|
++---+----+
+
+spark.sql("INSERT INTO $catalog.$db.$tbl VALUES (4, 'stg2')")
+*/
+
+spark.sql(s"""
+    CALL $catalog.system.fast_forward(
+        table => '$db.$tbl', 
+        branch => 'main', 
+        to => 'stg')
+""").show(false)
+/*
++--------------+-------------------+-------------------+
+|branch_updated|previous_ref       |updated_ref        |
++--------------+-------------------+-------------------+
+|main          |3523393143975697726|2586914022081012487|
++--------------+-------------------+-------------------+
+*/
+
+/* Review the `main` branch records:
+spark.sql("SET spark.wap.branch = main")
+spark.sql("SELECT * FROM $catalog.$db.$tbl").show(false)
++---+----+
+|id |name|
++---+----+
+|4  |stg2|
+|3  |main|
++---+----+
+*/
 ```
 
 ### Change Data Capture
