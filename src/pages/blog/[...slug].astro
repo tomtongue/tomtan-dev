@@ -1,7 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseView from '../../layouts/BaseView.astro';
-import BlogView from '../../layouts/BlogView.astro';
+import ArticleView from '../../layouts/ArticleView.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -17,7 +17,7 @@ const { Content } = await post.render();
 ---
 
 <BaseView title={post.data.title} description={post.data.description}>
-	<BlogView {...post.data}>
+	<ArticleView {...post.data}>
 		<Content />
-	</BlogView>
+	</ArticleView>
 </BaseView>

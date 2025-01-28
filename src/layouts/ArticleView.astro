@@ -1,0 +1,137 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import FormattedDateUtil from '../components/FormattedDateUtil.astro';
+
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<article class="content">
+    <h1>{title}</h1>
+    <FormattedDateUtil date={pubDate} />
+    {
+        updatedDate && (
+            <div class="last-updated-on">
+                Last updated on <FormattedDateUtil date={updatedDate} />
+            </div>
+        )
+    }
+    {
+        tags.map((tag) => (
+            <div class="tags">{tag}</div>
+        ))
+    }
+    <slot />
+</article>
+
+<style>
+/* 既存のスタイル変数の定義に追加 */
+.content {
+    /* 既存の変数はそのまま */
+    --content-width: 65rem;
+    --content-padding: 3rem;
+    --text-color: #333333;
+    --heading-color: #000000;
+    --link-color: #0070c9;
+    --code-background: #f6f8fa;
+    --background: #f6f8fa;
+    --blockquote-border: #e0e0e0;
+    --table-border: #e0e0e0;
+    --nav-height: 4rem; /* ナビゲーションバーの高さを定義 */
+    --safe-padding-top: calc(var(--nav-height) + 2rem); /* ナビゲーションバーの高さ + 余白 */
+
+    /* コンテンツのレイアウト調整 */
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--safe-padding-top) var(--content-padding) 0; /* 上部のパディングを調整 */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+/* h1のマージン調整 */
+.content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1.5rem; /* 上部マージンを0に変更 */
+    color: var(--heading-color);
+    letter-spacing: -0.02em;
+}
+
+/* 投稿日時と更新日時のスタイル */
+.last-updated-on {
+    color: var(--text-secondary, #666);
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+}
+
+/* タグのスタイル */
+.tags {
+    display: inline-block;
+    background: var(--background);
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary, #666);
+}
+
+/* レスポンシブ対応の調整 */
+@media (max-width: 1600px) {
+    .content {
+        --content-width: 55rem;
+        --content-padding: 2rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .content {
+        --content-width: 45rem;
+        --content-padding: 1.5rem;
+        --safe-padding-top: calc(var(--nav-height) + 1.5rem);
+    }
+
+    .content h1 { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+    .content {
+        --content-padding: 1rem;
+        --safe-padding-top: calc(var(--nav-height) + 1rem);
+    }
+
+    .content h1 { font-size: 2rem; }
+}
+
+/* 既存のダークモード対応はそのまま */
+@media (prefers-color-scheme: dark) {
+    .content {
+        --text-color: #e0e0e0;
+        --heading-color: #ffffff;
+        --link-color: #4ba1ff;
+        --code-background: #303031;
+        --blockquote-border: #424242;
+        --table-border: #424242;
+        --background: #303031;
+    }
+
+    .tags {
+        background: var(--code-background);
+        color: var(--text-color);
+    }
+}
+
+/* 既存の印刷用スタイルに追加 */
+@media print {
+    .content {
+        --content-width: 100%;
+        --content-padding: 0;
+        --safe-padding-top: 0; /* 印刷時はナビゲーションバーの考慮不要 */
+    }
+}
+</style>
