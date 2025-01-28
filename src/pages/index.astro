@@ -1,187 +1,191 @@
 ---
 import { getCollection } from 'astro:content';
-
-// Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseView from '../layouts/BaseView.astro';
-
-// Component Imports
 import GridView from '../components/GridView.astro';
-import BlogPostView from '../components/BlogPostView.astro';
+import BlogEntries from '../components/BlogEntries.astro';
 
-
-// Content Fetching: List four most recent blog projects
 const posts = (await getCollection('blog'))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 4);
-
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 ---
 
 <BaseView>
-	<div class="stack gap-20 lg:gap-48">
-		<main class="wrapper stack gap-20 lg:gap-48">
-			<section class="section with-background">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h1>Welcome to tomtan.dev</h1>
-					<p>Enjoy your spare time for Coffee and BigData open source!</p>
-				</header>
-				<div class="gallery">
-					<GridView variant="offset">
-						{
-							posts.map((post) => (post.data.draft == null || post.data.draft == false) && (
-								<li>
-									<BlogPostView post={post} />
-								</li>
-							))
-						}
-					</GridView>
-				</div>
-			</section>
+    <div class="home-container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to tomtan.dev</h1>
+                <p class="hero-description">Enjoy your spare time for Coffee and BigData open source!</p>
+            </div>
+        </section>
 
-		</main>
-	</div>
+        <section class="blog-section">
+            <div class="content-container">
+                <h2 class="section-title">Latest Posts</h2>
+                <div class="posts-container">
+                    <GridView>
+                        {
+                            posts.map((post) => (
+                                !post.data.draft && (
+                                    <BlogEntries post={post} />
+                                )
+                            ))
+                        }
+                    </GridView>
+                </div>
+            </div>
+        </section>
+    </div>
 </BaseView>
 
 <style>
-	.hero {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 2rem;
-	}
+:root {
+    --max-content-width: 75rem;
+    --content-padding: 2rem;
+    --hero-bg: #f5f5f7;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --section-spacing: 4rem;
+}
 
-	.roles {
-		display: none;
-	}
+.home-container {
+    width: 100%;
+    overflow-x: hidden;
+}
 
-	.hero img {
-		aspect-ratio: 5 / 4;
-		object-fit: cover;
-		object-position: top;
-		border-radius: 1.5rem;
-		box-shadow: var(--shadow-md);
-	}
+.hero {
+    background: linear-gradient(180deg, var(--hero-bg) 0%, #ffffff 100%);
+    padding: 8rem var(--content-padding) 6rem;
+    text-align: center;
+    position: relative;
+    margin-bottom: var(--section-spacing);
+}
 
-	@media (min-width: 50em) {
-		.hero {
-			display: grid;
-			grid-template-columns: 6fr 4fr;
-			padding-inline: 2.5rem;
-			gap: 3.75rem;
-		}
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -3rem;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    background: linear-gradient(180deg, rgba(245, 245, 247, 0.5) 0%, transparent 100%);
+    transform: skewY(-3deg);
+}
 
-		.roles {
-			margin-top: 0.5rem;
-			display: flex;
-			gap: 0.5rem;
-		}
+.hero-content {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
 
-		.hero img {
-			aspect-ratio: 3 / 4;
-			border-radius: 4.5rem;
-			object-fit: cover;
-		}
-	}
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
 
-	/* ====================================================== */
+.hero-description {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    max-width: 40rem;
+    margin: 0 auto;
+    line-height: 1.4;
+}
 
-	.section {
-		display: grid;
-		gap: 2rem;
-	}
+.blog-section {
+    padding: 0 var(--content-padding) var(--section-spacing);
+}
 
-	.with-background {
-		position: relative;
-	}
+.content-container {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
 
-	.with-background::before {
-		--hero-bg: var(--bg-image-subtle-2);
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.02em;
+}
 
-		content: '';
-		position: absolute;
-		pointer-events: none;
-		left: 50%;
-		width: 100vw;
-		aspect-ratio: calc(2.25 / var(--bg-scale));
-		top: 0;
-		transform: translateY(-75%) translateX(-50%);
-		background:
-			url('/assets/backgrounds/noise.png') top center/220px repeat,
-			var(--hero-bg) center center / var(--bg-gradient-size) no-repeat,
-			var(--gray-999);
-		background-blend-mode: overlay, normal, normal, normal;
-		mix-blend-mode: var(--bg-blend-mode);
-		z-index: -1;
-	}
+.posts-container {
+    width: 100%;
+}
 
-	.with-background.bg-variant::before {
-		--hero-bg: var(--bg-image-subtle-1);
-	}
+@media (max-width: 1440px) {
+    :root {
+        --max-content-width: 65rem;
+    }
+}
 
-	.section-header {
-		justify-self: left;
-		text-align: left;
-		font-size: var(--text-md);
-		color: var(--gray-300);
-	}
+@media (max-width: 1024px) {
+    :root {
+        --max-content-width: 55rem;
+        --content-padding: 1.5rem;
+    }
 
-	.section-header h1 {
-		font-size: 2.4em
-	}
-	@media (min-width: 50em) {
-		.section {
-			grid-template-columns: repeat(4, 1fr);
-			grid-template-areas: 'header header header header' 'gallery gallery gallery gallery';
-			gap: 3rem;
-		}
+    .hero h1 {
+        font-size: 3rem;
+    }
 
-		.section.with-cta {
-			grid-template-areas: 'header header header cta' 'gallery gallery gallery gallery';
-		}
+    .hero-description {
+        font-size: 1.25rem;
+    }
+}
 
-		.section-header {
-			grid-area: header;
-			font-size: var(--text-lg);
-		}
+@media (max-width: 768px) {
+    :root {
+        --content-padding: 1rem;
+        --section-spacing: 3rem;
+    }
 
-		.section-header h3 {
-			font-size: var(--text-4xl);
-		}
+    .hero {
+        padding: 6rem var(--content-padding) 4rem;
+    }
 
-		.with-cta .section-header {
-			justify-self: flex-start;
-			text-align: left;
-		}
+    .hero h1 {
+        font-size: 2.5rem;
+    }
 
-		.gallery {
-			grid-area: gallery;
-		}
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+}
 
-		.cta {
-			grid-area: cta;
-		}
-	}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --hero-bg: #1d1d1f;
+        --text-primary: #ffffff;
+        --text-secondary: #a1a1a6;
+    }
 
-	/* ====================================================== */
+    .hero {
+        background: linear-gradient(180deg, var(--hero-bg) 0%, #000000 100%);
+    }
 
-	.mention-card {
-		display: flex;
-		height: 7rem;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		border: 1px solid var(--gray-800);
-		border-radius: 1.5rem;
-		color: var(--gray-300);
-		background: var(--gradient-subtle);
-		box-shadow: var(--shadow-sm);
-	}
+    .hero::after {
+        background: linear-gradient(180deg, rgba(29, 29, 31, 0.5) 0%, transparent 100%);
+    }
+}
 
-	@media (min-width: 50em) {
-		.mention-card {
-			border-radius: 1.5rem;
-			height: 9.5rem;
-		}
-	}
+@media (prefers-reduced-motion: no-preference) {
+    .hero-content {
+        animation: fadeIn 1s ease-out;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 </style>

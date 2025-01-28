@@ -2,27 +2,86 @@
 const today = new Date();
 ---
 
-<footer>
-	&copy; {today.getFullYear()} Tomohiro Tanaka. All rights reserved.
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-copyright">
+            &copy; {today.getFullYear()} Tomohiro Tanaka. All rights reserved.
+        </div>
+    </div>
 </footer>
+
 <style>
-	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: #000;
-		text-align: center;
-	}
-	.social-links {
-		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
-	}
-	.social-links a {
-		text-decoration: none;
-		color: rgb(var(--gray));
-	}
-	.social-links a:hover {
-		color: rgb(var(--gray-dark));
-	}
+.footer {
+    --footer-background: #f5f5f7;
+    --footer-text: #86868b;
+    --footer-border: #d2d2d7;
+    --footer-height: 4rem;
+    --footer-padding: 2rem;
+
+    width: 100%;
+    background-color: var(--footer-background);
+    padding: var(--footer-padding) 0;
+    border-top: 1px solid var(--footer-border);
+    
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.footer-content {
+    max-width: var(--content-width, 75rem);
+    margin: 0 auto;
+    padding: 0 var(--content-padding, 2rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-copyright {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 0.875rem;
+    color: var(--footer-text);
+    text-align: center;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .footer {
+        --footer-padding: 1.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .footer {
+        --footer-background: #1d1d1f;
+        --footer-text: #86868b;
+        --footer-border: #424245;
+    }
+}
+
+@media print {
+    .footer {
+        display: none;
+    }
+}
+
+:global(html) {
+    height: 100%;
+}
+
+:global(body) {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+:global(body > div) {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
 </style>

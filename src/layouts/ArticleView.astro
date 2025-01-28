@@ -1,0 +1,201 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import FormattedDateUtil from '../components/FormattedDateUtil.astro';
+
+
+type Props = CollectionEntry<'blog'>['data'];
+
+const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.props;
+---
+
+<article class="content">
+    <h1>{title}</h1>
+    <div class="article-meta">
+        <FormattedDateUtil date={pubDate} />
+        <div class="article-tags">
+            {
+                tags.map((tag) => (
+                <a href={`/tags/${tag}`} class="article-tag">
+                    {tag}
+                </a>))
+            }
+        </div>
+    </div>
+    {
+        updatedDate && (
+            <div class="last-updated-on">
+                Last updated on <FormattedDateUtil date={updatedDate} />
+            </div>
+        )
+    }
+    <slot />
+</article>
+
+<style>
+.content {
+    --content-width: 65rem;
+    --content-padding: 3rem;
+    --text-color: #333333;
+    --heading-color: #000000;
+    --link-color: #0070c9;
+    --code-background: #f6f8fa;
+    --background: #f6f8fa;
+    --blockquote-border: #e0e0e0;
+    --table-border: #e0e0e0;
+    --nav-height: 4rem;
+    --safe-padding-top: calc(var(--nav-height) + 2rem);
+
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--safe-padding-top) var(--content-padding) 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-color);
+}
+
+/* h1のマージン調整 */
+.content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 0 1.5rem;
+    color: var(--heading-color);
+    letter-spacing: -0.02em;
+}
+
+.content :global(a) {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    display: inline-block;
+}
+
+.content :global(table) {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Table cells */
+.content :global(table th),
+.content :global(table td) {
+    padding: 0.75rem;
+    border: 1px solid var(--table-border, #e0e0e0);
+    text-align: left;
+    vertical-align: top;
+    
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-width: 100px;
+}
+
+.content :global(table th) {
+    font-weight: 600;
+}
+
+.article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+
+.last-updated-on {
+    color: var(--text-secondary, #cfcfcf);
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+}
+
+.article-tags {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+
+.article-tag {
+    background: var(--background);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    border: 0.5px solid var(--tag-border, rgba(0, 0, 0, 0.05));
+    font-size: 0.9rem;
+}
+
+@media (max-width: 1600px) {
+    .content {
+        --content-width: 55rem;
+        --content-padding: 2rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .content {
+        --content-width: 45rem;
+        --content-padding: 1.5rem;
+        --safe-padding-top: calc(var(--nav-height) + 1.5rem);
+    }
+
+    .content h1 { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+    .content {
+        --content-padding: 1rem;
+        --safe-padding-top: calc(var(--nav-height) + 1rem);
+    }
+
+    .content h1 { font-size: 2rem; }
+
+    .content :global(h2) {
+        font-size: 1.5rem;
+    }
+    
+    .content :global(h3) {
+        font-size: 1.25rem;
+    }
+    
+    .content :global(p),
+    .content :global(li) {
+        font-size: 1rem;
+    }
+
+    .content :global(table) {
+        font-size: 0.85rem;
+    }
+
+    .content :global(table th),
+    .content :global(table td) {
+        padding: 0.625rem var(--content-padding);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .content {
+        --text-color: #e0e0e0;
+        --heading-color: #ffffff;
+        --link-color: #4ba1ff;
+        --code-background: #303031;
+        --blockquote-border: #424242;
+        --table-border: #424242;
+        --background: #303031;
+    }
+
+    .tags {
+        background: var(--code-background);
+        color: var(--text-color);
+    }
+}
+
+@media print {
+    .content {
+        --content-width: 100%;
+        --content-padding: 0;
+        --safe-padding-top: 0; 
+    }
+}
+</style>
