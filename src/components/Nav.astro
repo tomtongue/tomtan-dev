@@ -2,25 +2,11 @@
 import Icon from './Icon.astro';
 import type { iconPaths } from './IconPaths';
 
-/** Main menu items */
-const textLinks: { label: string; href: string }[] = [
-	{ label: 'Home', href: '/' },
-	{ label: 'Blog', href: '/blog/' },
-];
-
 /** Icon links to social media — edit these with links to your profiles! */
 const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[] = [
 	{ label: 'GitHub', href: 'https://github.com/tomtongue/tomtan-dev', icon: 'github-logo' },
 	{ label: 'LinkedIn', href: 'https://linkedin.com/in/ttomtan', icon: 'linkedin-logo' },
 ];
-
-/** Test if a link is pointing to the current page. */
-const isCurrentPage = (href: string) => {
-	let pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-	if (pathname.at(0) !== '/') pathname = '/' + pathname;
-	if (pathname.at(-1) !== '/') pathname += '/';
-	return pathname === href || (href !== '/' && pathname.startsWith(href));
-};
 ---
 
 <nav class="nav-container" id="main-nav">
@@ -46,16 +32,6 @@ const isCurrentPage = (href: string) => {
 
     <!-- モバイルメニュー -->
     <div class="mobile-menu" hidden>
-        <div class="mobile-links">
-            {textLinks.map(({ label, href }) => (
-                <a 
-                    href={href}
-                    class:list={['mobile-link', { active: isCurrentPage(href) }]}
-                >
-                    {label}
-                </a>
-            ))}
-        </div>
         <div class="mobile-social">
             {iconLinks.map(({ href, icon, label }) => (
                 <a href={href} class="social-link" target="_blank" rel="noopener">
@@ -124,7 +100,7 @@ menuButton?.addEventListener('click', () => {
     left: 0;
     right: 0;
     height: var(--nav-height, 4rem);
-    background-color: rgba(255, 255, 255, 0.98);
+    background-color: rgba(255, 255, 255, 0.40);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     z-index: 1000;
@@ -269,16 +245,13 @@ menuButton?.addEventListener('click', () => {
     .mobile-social {
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid var(--border-color);
     }
 }
 
 /* ダークモード対応 */
 @media (prefers-color-scheme: dark) {
     .nav-container {
-        background-color: #1e1e1e;
+        background-color:  rgba(30,30,30,0.4)
     }
 }
 

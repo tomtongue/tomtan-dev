@@ -13,40 +13,34 @@ const { variant } = Astro.props;
 </div>
 
 <style>
-/* グリッドコンテナ */
 .grid-container {
     width: 100%;
-    max-width: var(--content-width, 75rem);
-    margin: 0 auto;
     padding: 0 var(--content-padding, 2rem);
+    margin: 0 auto;
 }
 
-/* ブロググリッドのベースレイアウト */
 .blog-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2列レイアウトを強制 */
+    grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
     list-style: none;
     padding: 0;
-    margin: 2rem 0;
+    margin: 2rem auto;
     width: 100%;
-}
-
-/* レスポンシブデザイン */
-@media (max-width: 1024px) {
-    .blog-grid {
-        gap: 2rem;
-    }
+    max-width: var(--content-width, 75rem);
 }
 
 @media (max-width: 768px) {
-    .blog-grid {
-        grid-template-columns: 1fr; /* モバイルでは1列 */
-        gap: 1.5rem;
-    }
-    
     .grid-container {
-        padding: 0 1rem;
+        padding: 0rem;
+    }
+
+    .blog-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: calc(100% - 2rem);
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 </style>

@@ -11,7 +11,7 @@ const { data, slug } = Astro.props.post;
 ---
 
 <li class="blog-card">
-    <a href={`/blog/${slug}`} class="card-link">
+    <a href={`/blog/${slug}`} class="card">
         <div class="image-container">
             <img
                 width={720}
@@ -50,14 +50,26 @@ const { data, slug } = Astro.props.post;
 		border: 1px solid var(--card-border);
 		box-shadow: var(--card-shadow);
 		transition: all 0.3s ease;
+
+		width: 100%; /* カードの幅を親要素に合わせる */
+    	max-width: 100%; /* はみ出しを防ぐ */
+    	margin: 0 auto; /* 中央配置 */
 	}
 	
 	.blog-card:hover {
 		transform: translateY(-4px);
 		box-shadow: var(--card-hover-shadow);
 	}
-	
-	/* 画像コンテナ */
+
+	@media (max-width: 768px) {
+		.blog-card {
+			max-width: 100%; /* モバイルでの最大幅を設定 */
+		}
+		.card-content {
+			padding: 1rem; /* モバイルでのパディングを調整 */
+		}
+	}
+
 	.image-container {
 		aspect-ratio: 16 / 9;
 		overflow: hidden;
@@ -102,6 +114,8 @@ const { data, slug } = Astro.props.post;
 		color: #000000;
 		margin: 0.75rem 0 0 0;
 	}
+
+	
 	
 	/* ダークモード対応 */
 	@media (prefers-color-scheme: dark) {

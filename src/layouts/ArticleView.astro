@@ -63,6 +63,41 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     letter-spacing: -0.02em;
 }
 
+.content :global(a) {
+    word-break: break-word; /* 長いURLを適切に折り返す */
+    overflow-wrap: break-word;
+    max-width: 100%;
+    display: inline-block;
+}
+
+.content :global(table) {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+    table-layout: fixed; /* テーブルの列幅を固定 */
+}
+
+/* テーブルセルの基本スタイル */
+.content :global(table th),
+.content :global(table td) {
+    padding: 0.75rem;
+    border: 1px solid var(--table-border, #e0e0e0);
+    text-align: left;
+    vertical-align: top; /* 長いコンテンツの場合、上揃えにする */
+    
+    /* テキストの折り返し設定 */
+    white-space: normal; /* テキストを折り返す */
+    word-wrap: break-word; /* 長い単語も折り返す */
+    overflow-wrap: break-word;
+    min-width: 100px; /* セルの最小幅を設定 */
+}
+
+/* テーブルヘッダーのスタイル */
+.content :global(table th) {
+    font-weight: 600;
+}
+
+
 /* 投稿日時と更新日時のスタイル */
 .last-updated-on {
     color: var(--text-secondary, #666);
@@ -106,6 +141,29 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     }
 
     .content h1 { font-size: 2rem; }
+
+    .content :global(h2) {
+        font-size: 1.5rem;
+    }
+    
+    .content :global(h3) {
+        font-size: 1.25rem;
+    }
+    
+    .content :global(p),
+    .content :global(li) {
+        font-size: 1rem;
+    }
+
+    .content :global(table) {
+        /* モバイルでのテーブルスタイル */
+        font-size: 0.85rem;
+    }
+
+    .content :global(table th),
+    .content :global(table td) {
+        padding: 0.625rem var(--content-padding);
+    }
 }
 
 /* 既存のダークモード対応はそのまま */
