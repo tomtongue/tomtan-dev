@@ -19,12 +19,13 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
             {iconLinks.map(({ href, icon, label }) => (
                 <a href={href} class="social-link" target="_blank" rel="noopener">
                     <span class="sr-only">{label}</span>
+                    <Icon icon={icon} size="1.5em" />
                 </a>
             ))}
         </div>
 
         <button class="mobile-menu-button" aria-label="Menu" aria-expanded="false">
-            <Icon icon="list" />
+            <Icon icon="list" size="1.6em" />
         </button>
     </div>
 
@@ -33,7 +34,7 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
             {iconLinks.map(({ href, icon, label }) => (
                 <a href={href} class="social-link" target="_blank" rel="noopener">
                     <span class="sr-only">{label}</span>
-                    <Icon icon={icon} />
+                    <Icon icon={icon} size="1.5em" />
                 </a>
             ))}
         </div>
@@ -136,7 +137,6 @@ menuButton?.addEventListener('click', () => {
     letter-spacing: -0.01em;
 }
 
-/* メインナビゲーションリンク */
 .nav-links {
     display: flex;
     gap: 2rem;
@@ -184,6 +184,9 @@ menuButton?.addEventListener('click', () => {
     transition: color 0.2s ease;
     padding: 0.5rem;
     border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .social-link:hover {
@@ -211,6 +214,18 @@ menuButton?.addEventListener('click', () => {
     box-shadow: var(--shadow-md);
 }
 
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 @media (max-width: 768px) {
     .nav-links,
     .nav-social {
@@ -235,12 +250,14 @@ menuButton?.addEventListener('click', () => {
     .mobile-social {
         display: flex;
         justify-content: center;
+        gap: 1rem;
+        padding: 1rem 0;
     }
 }
 
 @media (prefers-color-scheme: dark) {
     .nav-container {
-        background-color:  rgba(30,30,30,0.4)
+        background-color: rgba(30,30,30,0.4);
     }
 }
 
