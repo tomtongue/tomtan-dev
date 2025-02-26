@@ -47,37 +47,39 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
 let lastScroll = 0;
 const nav = document.getElementById('main-nav');
 const scrollThreshold = 50;
+const scrollDeltaThreshold = 5; // Minimum scroll difference to trigger a change
 
 function handleScroll() {
     const currentScroll = window.scrollY;
+    const scrollDelta = Math.abs(currentScroll - lastScroll);
     
-    // Detect scroll position
-    if (currentScroll <= 0) {
-        // Show the bar 
-        nav.classList.remove('nav-hidden');
-        nav.classList.remove('nav-scrolled');
-    } else if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
-        // Hide the bar scrolling up
-        nav.classList.add('nav-hidden');
-        nav.classList.add('nav-scrolled');
-    } else if (currentScroll < lastScroll) {
-        // Show the bar for scrolling down
-        nav.classList.remove('nav-hidden');
-        nav.classList.add('nav-scrolled');
+    // Only process if scroll difference is significant
+    if (scrollDelta > scrollDeltaThreshold) {
+        // At the top of the page
+        if (currentScroll <= 10) {
+            nav.classList.remove('nav-hidden');
+            nav.classList.remove('nav-scrolled');
+        } 
+        // Scrolling DOWN (increasing scroll position)
+        else if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
+            nav.classList.add('nav-hidden');
+            nav.classList.add('nav-scrolled');
+        } 
+        // Scrolling UP (decreasing scroll position)
+        else if (currentScroll < lastScroll) {
+            nav.classList.remove('nav-hidden');
+            nav.classList.add('nav-scrolled');
+        }
+        
+        lastScroll = currentScroll;
     }
-    
-    lastScroll = currentScroll;
 }
 
-let ticking = false;
+// Improved scroll handling with better debouncing
+let scrollTimeout;
 window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            handleScroll();
-            ticking = false;
-        });
-        ticking = true;
-    }
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(handleScroll, 10);
 });
 
 const menuButton = document.querySelector('.mobile-menu-button');
@@ -111,6 +113,7 @@ menuButton?.addEventListener('click', () => {
 
 .nav-hidden {
     transform: translateY(-100%);
+    transition: transform 0.3s ease;
 }
 
 .nav-content {
