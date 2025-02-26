@@ -1,7 +1,7 @@
 {
   "name": "tomtan-dev",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,12 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.0.3",
+    "@astrojs/mdx": "^4.0.8",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/starlight-tailwind": "^3.0.0",
-    "@astrojs/tailwind": "^5.1.5",
-    "astro": "^5.1.2",
+    "@astrojs/tailwind": "^6.0.0",
+    "astro": "^5.3.1",
     "tailwindcss": "^3.4.17"
   }
 }
