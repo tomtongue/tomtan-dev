@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import BaseView from '../../layouts/BaseView.astro';
+import Icon from '../../components/Icon.astro';
+
+// Get all unique tags and count posts for each
+const allPosts = await getCollection('blog');
+const nonDraftPosts = allPosts.filter(post => !post.data.draft);
+
+// Create a map of tag -> count of posts
+const tagCounts = nonDraftPosts.reduce((acc, post) => {
+    post.data.tags.forEach(tag => {
+        acc.set(tag, (acc.get(tag) || 0) + 1);
+    });
+    return acc;
+}, new Map());
+
+// Convert to array and sort alphabetically
+const tags = [...tagCounts.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([tag, count]) => ({ tag, count }));
+---
+
+<BaseView title="All Tags" description="Browse all tags and topics on tomtan.dev">
+    <div class="tags-container">
+        <header class="tags-header">
+            <div class="tags-heading">
+                <a href="/" class="back-button">
+                    <Icon icon="arrow-left" />
+                    <span>Back to Home</span>
+                </a>
+                <h1>All Tags</h1>
+                <p>Browse articles by topic</p>
+            </div>
+        </header>
+        
+        <section class="tags-section">
+            <div class="tags-grid">
+                {tags.map(({ tag, count }) => (
+                    <a href={`/tags/${tag}`} class="tag-card">
+                        <h2>{tag}</h2>
+                        <span class="tag-count">{count} {count === 1 ? 'article' : 'articles'}</span>
+                    </a>
+                ))}
+            </div>
+        </section>
+    </div>
+</BaseView>
+
+<style>
+    .tags-container {
+        max-width: var(--content-width, 75rem);
+        margin: 0 auto;
+        padding: 0 var(--content-padding, 2rem);
+    }
+
+    .tags-header {
+        padding: calc(var(--nav-height, 4rem) + 2rem) 0 2rem;
+        border-bottom: 1px solid var(--border-color, #e5e5e5);
+        margin-bottom: 3rem;
+    }
+
+    .tags-heading {
+        max-width: 60rem;
+    }
+
+    .tags-heading h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 1rem 0 0.5rem;
+        color: var(--text-primary, #1d1d1f);
+    }
+
+    .tags-heading p {
+        font-size: 1.125rem;
+        color: var(--text-secondary, #666666);
+        margin: 0.5rem 0 0;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color, #0071e3);
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        transition: color 0.2s ease;
+    }
+
+    .back-button:hover {
+        color: var(--secondary-color, #40b8ff);
+    }
+
+    .tags-section {
+        margin-bottom: 4rem;
+    }
+
+    .tags-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .tag-card {
+        background-color: var(--surface-color, #f5f5f7);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 1px solid var(--border-color, #e5e5e5);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tag-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .tag-card h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem;
+        color: var(--text-primary, #1d1d1f);
+    }
+
+    .tag-count {
+        font-size: 0.875rem;
+        color: var(--text-secondary, #666666);
+    }
+
+    @media (max-width: 768px) {
+        .tags-header {
+            padding-top: calc(var(--nav-height, 4rem) + 1rem);
+            margin-bottom: 2rem;
+        }
+
+        .tags-heading h1 {
+            font-size: 2.25rem;
+        }
+
+        .tags-heading p {
+            font-size: 1rem;
+        }
+
+        .tags-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .tag-card {
+            padding: 1rem;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .tag-card {
+            background-color: #2d2d2f;
+            border-color: #3d3d3f;
+        }
+
+        .tag-card:hover {
+            box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+    }
+</style>

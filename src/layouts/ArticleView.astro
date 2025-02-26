@@ -79,7 +79,6 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     table-layout: fixed;
 }
 
-/* Table cells */
 .content :global(table th),
 .content :global(table td) {
     padding: 0.75rem;
@@ -95,6 +94,18 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
 
 .content :global(table th) {
     font-weight: 600;
+}
+
+.content :global(pre) {
+    line-height: 1.4;
+}
+
+.content :global(pre code) {
+    line-height: 1.4;
+}
+
+.content :global(code) {
+    line-height: 1.4;
 }
 
 .article-meta {

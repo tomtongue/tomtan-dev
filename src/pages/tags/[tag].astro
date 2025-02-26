@@ -1,0 +1,173 @@
+---
+import { getCollection } from 'astro:content';
+import BaseView from '../../layouts/BaseView.astro';
+import GridView from '../../components/GridView.astro';
+import BlogEntries from '../../components/BlogEntries.astro';
+import Icon from '../../components/Icon.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+    
+    return tags.map(tag => ({
+        params: { tag },
+        props: {
+            posts: posts.filter(post => post.data.tags.includes(tag) && !post.data.draft)
+        }
+    }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseView title={`${tag} Posts`} description={`Articles and blog posts about ${tag}`}>
+    <div class="tag-container">
+        <header class="tag-header">
+            <div class="tag-heading">
+                <a href="/" class="back-button">
+                    <Icon icon="arrow-left" />
+                    <span>Back to Home</span>
+                </a>
+                <h1>{tag}</h1>
+                <p>{posts.length} {posts.length === 1 ? 'article' : 'articles'} with this tag</p>
+            </div>
+        </header>
+        
+        <section class="posts-section">
+            {posts.length > 0 ? (
+                <GridView>
+                    {posts.map((post) => (
+                        <BlogEntries post={post} />
+                    ))}
+                </GridView>
+            ) : (
+                <div class="no-posts">
+                    <p>No posts with this tag yet.</p>
+                </div>
+            )}
+        </section>
+
+        <section class="related-tags">
+            <h2>Tags</h2>
+            <div class="tag-list">
+                <a href="/tags" class="tag-item view-all">
+                    <Icon icon="list" size="0.85em" />
+                    <span>View all tags</span>
+                </a>
+            </div>
+        </section>
+    </div>
+</BaseView>
+
+<style>
+    .tag-container {
+        max-width: var(--content-width, 75rem);
+        margin: 0 auto;
+        padding: 0 var(--content-padding, 2rem);
+    }
+
+    .tag-header {
+        padding: calc(var(--nav-height, 4rem) + 2rem) 0 2rem;
+        border-bottom: 1px solid var(--border-color, #e5e5e5);
+        margin-bottom: 3rem;
+    }
+
+    .tag-heading {
+        max-width: 60rem;
+    }
+
+    .tag-heading h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin: 1rem 0 0.5rem;
+        color: var(--text-primary, #1d1d1f);
+    }
+
+    .tag-heading p {
+        font-size: 1.125rem;
+        color: var(--text-secondary, #666666);
+        margin: 0.5rem 0 0;
+    }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary-color, #0071e3);
+        text-decoration: none;
+        font-size: 1rem;
+        padding: 0.5rem 0;
+        transition: color 0.2s ease;
+    }
+
+    .back-button:hover {
+        color: var(--secondary-color, #40b8ff);
+    }
+
+    .posts-section {
+        margin-bottom: 4rem;
+    }
+
+    .no-posts {
+        background-color: var(--surface-color, #f5f5f7);
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-secondary, #666666);
+    }
+
+    .related-tags {
+        margin-bottom: 4rem;
+    }
+
+    .related-tags h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary, #1d1d1f);
+    }
+
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    
+    /* Consistent tag styling between pages */
+    .tag-item {
+        display: inline-block;
+        background: var(--background, #f5f5f7);
+        color: var(--text-secondary, #666666);
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        text-decoration: none;
+        transition: background-color 0.2s ease;
+    }
+    
+    .tag-item:hover {
+        background-color: var(--border-color, #e5e5e5);
+    }
+
+    @media (max-width: 768px) {
+        .tag-header {
+            padding-top: calc(var(--nav-height, 4rem) + 1rem);
+            margin-bottom: 2rem;
+        }
+
+        .tag-heading h1 {
+            font-size: 2.25rem;
+        }
+
+        .tag-heading p {
+            font-size: 1rem;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .no-posts {
+            background-color: #2d2d2f;
+        }
+    }
+</style>
