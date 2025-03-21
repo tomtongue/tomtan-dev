@@ -14,6 +14,7 @@ The following table shows the summary of the Iceberg’s file name convention:
 | manifest file | `<commitUUID>-m<manifestCount.getAndIncrement>.avro`         |       n/a                                                      |
 
 ## Details
+
 When you operate something on your Iceberg table via a distributed computing engine such as Apache Spark, Trino, Flink etc, you might see the following files are generated:
 
 ```
@@ -93,4 +94,26 @@ See https://github.com/apache/iceberg/blob/apache-iceberg-1.7.1/core/src/main/ja
 
 ```java
   private final AtomicInteger manifestCount = new AtomicInteger(0);
+```
+
+## Appendix
+
+### File name convention for Hadoop Catalog
+
+The convention for the Hadoop catalog is different from the other catalogs. When the table metadata is updated, you might see the metadata file names starting from `v1`, `v2`, ... in your storage:
+
+```/iceberg-warehouse/db/table/metadata
+  ├── v1.metadata.json // metadata file
+  ├── v2.metadata.json 
+  ├── snap-1081867561747206961-1-fc6cefef-bfb2-4c11-a105-205785bcb5ac.avro // manifest list
+  ├── fc6cefef-bfb2-4c11-a105-205785bcb5ac-m0.avro // manifest file
+  ...
+```
+
+This is because `HadoopTableOperations` has the following implementaion (which is different from other catalogs) for this as below (see https://github.com/apache/iceberg/blob/apache-iceberg-1.8.1/core/src/main/java/org/apache/iceberg/hadoop/HadoopTableOperations.java#L259)
+
+```java
+  private Path metadataFilePath(int metadataVersion, TableMetadataParser.Codec codec) {
+    return metadataPath("v" + metadataVersion + TableMetadataParser.getFileExtension(codec));
+  }
 ```
