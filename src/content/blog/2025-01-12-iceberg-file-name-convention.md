@@ -17,7 +17,7 @@ The following table shows the summary of the Iceberg’s file name convention:
 
 When you operate something on your Iceberg table via a distributed computing engine such as Apache Spark, Trino, Flink etc, you might see the following files are generated:
 
-```
+```text
 /iceberg-warehouse/db/table/metadata
   ├── 00000-25005c05-834d-4650-a529-410eabcb12d6.metadata.json // metadata file
   ├── 00001-65f87f03-6d7e-41be-8dce-c813ffe70937.metadata.json 

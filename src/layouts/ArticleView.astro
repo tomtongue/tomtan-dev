@@ -29,6 +29,18 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
             </div>
         )
     }
+    {
+        heroImage && (
+            <div class="hero-image-container">
+                <img
+                    src={heroImage}
+                    alt={title}
+                    class="hero-image"
+                    loading="eager"
+                />
+            </div>
+        )
+    }
     <slot />
 </article>
 
@@ -202,11 +214,41 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     }
 }
 
+.hero-image-container {
+    margin: 2rem 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: var(--code-background);
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 500px;
+}
+
+@media (max-width: 768px) {
+    .hero-image-container {
+        margin: 1.5rem 0;
+        border-radius: 0.5rem;
+    }
+
+    .hero-image {
+        max-height: 300px;
+    }
+}
+
 @media print {
     .content {
         --content-width: 100%;
         --content-padding: 0;
-        --safe-padding-top: 0; 
+        --safe-padding-top: 0;
+    }
+
+    .hero-image-container {
+        page-break-inside: avoid;
     }
 }
 </style>

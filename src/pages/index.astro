@@ -13,13 +13,14 @@ const posts = (await getCollection('blog'))
         <section class="hero">
             <div class="hero-content">
                 <h1>Welcome to tomtan.dev</h1>
-                <p class="hero-description">Enjoy your spare time for Coffee and BigData open source!</p>
+                <p class="hero-description">Enjoy your spare time for Coffee and BigData open source!
+
+</p>
             </div>
         </section>
 
-        <section class="blog-section">
+        <div class="blog-section">
             <div class="content-container">
-                <h2 class="section-title">Latest Posts</h2>
                 <div class="posts-container">
                     <GridView>
                         {
@@ -32,7 +33,7 @@ const posts = (await getCollection('blog'))
                     </GridView>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 </BaseView>
 
@@ -40,10 +41,10 @@ const posts = (await getCollection('blog'))
 :root {
     --max-content-width: 75rem;
     --content-padding: 2rem;
-    --hero-bg: #f5f5f7;
     --text-primary: #1d1d1f;
     --text-secondary: #86868b;
     --section-spacing: 4rem;
+    --hero-bg: #f5f5f7;
 }
 
 .home-container {
@@ -53,43 +54,28 @@ const posts = (await getCollection('blog'))
 
 .hero {
     background: linear-gradient(180deg, var(--hero-bg) 0%, #ffffff 100%);
-    padding: 8rem var(--content-padding) 6rem;
+    padding: 3rem var(--content-padding) 2rem;
     text-align: center;
-    position: relative;
-    margin-bottom: var(--section-spacing);
-}
-
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -3rem;
-    left: 0;
-    right: 0;
-    height: 4rem;
-    background: linear-gradient(180deg, rgba(245, 245, 247, 0.5) 0%, transparent 100%);
-    transform: skewY(-3deg);
+    margin-bottom: 2rem;
 }
 
 .hero-content {
     max-width: var(--max-content-width);
     margin: 0 auto;
-    position: relative;
-    z-index: 1;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     line-height: 1.1;
     letter-spacing: -0.02em;
 }
 
 .hero-description {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     color: var(--text-secondary);
-    max-width: 40rem;
     margin: 0 auto;
     line-height: 1.4;
 }
@@ -101,14 +87,6 @@ const posts = (await getCollection('blog'))
 .content-container {
     max-width: var(--max-content-width);
     margin: 0 auto;
-}
-
-.section-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 2.5rem;
-    letter-spacing: -0.02em;
 }
 
 .posts-container {
@@ -126,14 +104,6 @@ const posts = (await getCollection('blog'))
         --max-content-width: 55rem;
         --content-padding: 1.5rem;
     }
-
-    .hero h1 {
-        font-size: 3rem;
-    }
-
-    .hero-description {
-        font-size: 1.25rem;
-    }
 }
 
 @media (max-width: 768px) {
@@ -143,49 +113,27 @@ const posts = (await getCollection('blog'))
     }
 
     .hero {
-        padding: 6rem var(--content-padding) 4rem;
+        padding: 2rem var(--content-padding) 1.5rem;
     }
 
     .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
 
-    .section-title {
-        font-size: 2rem;
-        margin-bottom: 2rem;
+    .hero-description {
+        font-size: 1rem;
     }
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --hero-bg: #1d1d1f;
         --text-primary: #ffffff;
         --text-secondary: #a1a1a6;
+        --hero-bg: #1d1d1f;
     }
 
     .hero {
         background: linear-gradient(180deg, var(--hero-bg) 0%, #000000 100%);
-    }
-
-    .hero::after {
-        background: linear-gradient(180deg, rgba(29, 29, 31, 0.5) 0%, transparent 100%);
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .hero-content {
-        animation: fadeIn 1s ease-out;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 </style>
