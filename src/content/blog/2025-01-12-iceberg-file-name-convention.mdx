@@ -5,7 +5,10 @@ pubDate: 'Jan. 15 2025'
 tags: ['iceberg']
 ---
 
-The following table shows the summary of the Iceberg’s file name convention:
+import LinkPreview from '../../components/LinkPreview.astro';
+export const components = { a: LinkPreview };
+
+The following table shows the summary of the Iceberg's file name convention:
 
 | File name     | Convention                                                   | Note                                                         |
 |---------------|--------------------------------------------------------------|--------------------------------------------------------------|
@@ -110,7 +113,7 @@ The convention for the Hadoop catalog is different from the other catalogs. When
   ...
 ```
 
-This is because `HadoopTableOperations` has the following implementaion (which is different from other catalogs) for this as below (see https://github.com/apache/iceberg/blob/apache-iceberg-1.8.1/core/src/main/java/org/apache/iceberg/hadoop/HadoopTableOperations.java#L259)
+This is because `HadoopTableOperations` has the following implementaion (which is different from other catalogs) for this as below: https://github.com/apache/iceberg/blob/apache-iceberg-1.8.1/core/src/main/java/org/apache/iceberg/hadoop/HadoopTableOperations.java#L259
 
 ```java
   private Path metadataFilePath(int metadataVersion, TableMetadataParser.Codec codec) {

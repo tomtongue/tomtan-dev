@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from 'astro:content';
 import BaseView from '../../layouts/BaseView.astro';
 import ArticleView from '../../layouts/ArticleView.astro';
+import LinkPreview from '../../components/LinkPreview.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -18,6 +19,6 @@ const { Content } = await post.render();
 
 <BaseView title={post.data.title} description={post.data.description}>
 	<ArticleView {...post.data}>
-		<Content />
+		<Content components={{ a: LinkPreview }} />
 	</ArticleView>
 </BaseView>

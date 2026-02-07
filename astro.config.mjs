@@ -9,9 +9,16 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
     site: 'https://tomtan.dev',
     integrations: [
-        mdx(), 
+        mdx({
+            remarkPlugins: [],
+            rehypePlugins: [],
+        }),
         sitemap(),
         tailwind({
             applyBaseStyles: false,
         })],
+    markdown: {
+        // This applies to both .md and .mdx files
+        extendDefaultPlugins: true,
+    },
 });

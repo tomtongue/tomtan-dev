@@ -219,6 +219,9 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     border-radius: 0.75rem;
     overflow: hidden;
     background: var(--code-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hero-image {
@@ -226,6 +229,7 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     height: auto;
     display: block;
     object-fit: cover;
+    object-position: center center;
     max-height: 500px;
 }
 
