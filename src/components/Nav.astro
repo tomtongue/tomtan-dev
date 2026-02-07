@@ -52,11 +52,11 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
 
 // Show Navigation bar
 let lastScroll = 0;
-const nav = document.getElementById('main-nav');
 const scrollThreshold = 50;
 const scrollDeltaThreshold = 5; // Minimum scroll difference to trigger a change
 
 function handleScroll() {
+    const nav = document.getElementById('main-nav');
     if (!nav) return;
 
     const currentScroll = window.scrollY;
@@ -91,16 +91,40 @@ window.addEventListener('scroll', () => {
     scrollTimeout = window.setTimeout(handleScroll, 10);
 });
 
-const menuButton = document.querySelector('.mobile-menu-button');
-const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
+function toggleMenu(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
 
-menuButton?.addEventListener('click', () => {
+    const menuButton = document.querySelector('.mobile-menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
+
+    if (!menuButton || !mobileMenu) return;
+
     const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
     menuButton.setAttribute('aria-expanded', (!isExpanded).toString());
-    if (mobileMenu) {
-        mobileMenu.hidden = isExpanded;
+    mobileMenu.hidden = isExpanded;
+}
+
+function setupMenu() {
+    const menuButton = document.querySelector('.mobile-menu-button');
+    const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
+
+    if (menuButton && mobileMenu) {
+        // Remove existing listeners to avoid duplicates
+        menuButton.removeEventListener('click', toggleMenu);
+        menuButton.removeEventListener('touchstart', toggleMenu);
+
+        // Add listeners
+        menuButton.addEventListener('click', toggleMenu);
+        menuButton.addEventListener('touchstart', toggleMenu, { passive: false });
     }
-});
+}
+
+// Setup on initial page load
+setupMenu();
+
+// Setup on every page navigation (for ClientRouter)
+document.addEventListener('astro:page-load', setupMenu);
 </script>
 
 <style>
@@ -153,6 +177,12 @@ menuButton?.addEventListener('click', () => {
 .nav-title {
     font-size: 0.9375rem;
     letter-spacing: -0.01em;
+}
+
+@media (max-width: 768px) {
+    .nav-title {
+        font-size: 1rem;
+    }
 }
 
 .nav-links {
@@ -280,7 +310,7 @@ menuButton?.addEventListener('click', () => {
     .mobile-link {
         text-decoration: none;
         color: var(--text-primary);
-        font-size: 1rem;
+        font-size: 1.125rem;
         font-weight: 500;
         padding: 0.5rem;
         text-align: center;
