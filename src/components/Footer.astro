@@ -12,17 +12,16 @@ const today = new Date();
 
 <style>
 .footer {
-    --footer-background: #f5f5f7;
-    --footer-text: #86868b;
-    --footer-border: #d2d2d7;
+    --footer-background: #ffffff;
+    --footer-text: #1d1d1f;
+    --footer-border: #e5e5e5;
     --footer-height: 4rem;
     --footer-padding: 2rem;
 
     width: 100%;
     background-color: var(--footer-background);
     padding: var(--footer-padding) 0;
-    border-top: 1px solid var(--footer-border);
-    
+
     margin-top: auto;
     flex-shrink: 0;
 }
@@ -30,7 +29,8 @@ const today = new Date();
 .footer-content {
     max-width: var(--content-width, 75rem);
     margin: 0 auto;
-    padding: 0 var(--content-padding, 2rem);
+    padding: var(--footer-padding) var(--content-padding, 2rem) 0;
+    border-top: 1px solid var(--footer-border);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,14 +52,15 @@ const today = new Date();
     .footer-content {
         flex-direction: column;
         gap: 1rem;
+        margin: 0 1rem;
     }
 }
 
 @media (prefers-color-scheme: dark) {
     .footer {
-        --footer-background: #1d1d1f;
-        --footer-text: #86868b;
-        --footer-border: #424245;
+        --footer-background: #1e1e1e;
+        --footer-text: #ffffff;
+        --footer-border: #333333;
     }
 }
 
