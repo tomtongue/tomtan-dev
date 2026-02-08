@@ -113,7 +113,7 @@ const posts = (await getCollection('blog'))
     }
 
     .hero {
-        padding: 5rem var(--content-padding) 1.5rem;
+        padding: calc(5rem + env(safe-area-inset-top, 0px)) var(--content-padding) 1.5rem;
     }
 
     .hero h1 {

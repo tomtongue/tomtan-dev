@@ -56,7 +56,7 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     --blockquote-border: #e0e0e0;
     --table-border: #e0e0e0;
     --nav-height: 4rem;
-    --safe-padding-top: calc(var(--nav-height) + 2rem);
+    --safe-padding-top: calc(var(--nav-height) + 2rem + env(safe-area-inset-top, 0px));
 
     max-width: var(--content-width);
     margin: 0 auto;
@@ -160,7 +160,7 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     .content {
         --content-width: 45rem;
         --content-padding: 1.5rem;
-        --safe-padding-top: calc(var(--nav-height) + 1.5rem);
+        --safe-padding-top: calc(var(--nav-height) + 1.5rem + env(safe-area-inset-top, 0px));
     }
 
     .content h1 { font-size: 2.5rem; }
@@ -169,7 +169,7 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
 @media (max-width: 768px) {
     .content {
         --content-padding: 1rem;
-        --safe-padding-top: calc(var(--nav-height) + 1rem);
+        --safe-padding-top: calc(var(--nav-height) + 1rem + env(safe-area-inset-top, 0px));
         font-size: 1.0625rem;
     }
 

@@ -130,7 +130,7 @@ document.addEventListener('astro:page-load', setupMenu);
 <style>
 .nav-container {
     position: fixed;
-    top: 0.75rem;
+    top: calc(0.75rem + env(safe-area-inset-top, 0px));
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
