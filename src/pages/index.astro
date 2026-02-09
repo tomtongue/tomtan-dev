@@ -4,47 +4,56 @@ import BaseView from '../layouts/BaseView.astro';
 import GridView from '../components/GridView.astro';
 import BlogEntries from '../components/BlogEntries.astro';
 
+const INITIAL_COUNT = 3;
+const LOAD_MORE_COUNT = 10;
+
 const posts = (await getCollection('blog'))
+    .filter((post) => !post.data.draft)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 ---
 
 <BaseView>
     <div class="home-container">
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Welcome to tomtan.dev</h1>
-                <p class="hero-description">Enjoy your spare time for Coffee and BigData open source!
-
-</p>
-            </div>
-        </section>
-
-        <div class="blog-section">
+        <section class="section-block">
             <div class="content-container">
+                <h2 class="section-title">Posts</h2>
                 <div class="posts-container">
                     <GridView>
                         {
-                            posts.map((post) => (
-                                !post.data.draft && (
+                            posts.map((post, i) => (
+                                <div class:list={['post-item', { hidden: i >= INITIAL_COUNT }]} data-index={i}>
                                     <BlogEntries post={post} />
-                                )
+                                </div>
                             ))
                         }
                     </GridView>
+                    {posts.length > INITIAL_COUNT && (
+                        <button id="load-more" class="load-more-btn" data-visible={INITIAL_COUNT} data-total={posts.length} data-step={LOAD_MORE_COUNT}>
+                            Show older posts
+                        </button>
+                    )}
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="section-block">
+            <div class="content-container">
+                <h2 class="section-title">Works</h2>
+                <div class="works-container">
+                    <!-- Book publications, podcasts, etc. -->
+                </div>
+            </div>
+        </section>
     </div>
 </BaseView>
 
 <style>
 :root {
-    --max-content-width: 75rem;
+    --max-content-width: 50rem;
     --content-padding: 2rem;
     --text-primary: #1d1d1f;
     --text-secondary: #86868b;
-    --section-spacing: 4rem;
-    --hero-bg: #ffffff;
+    --section-spacing: 2rem;
 }
 
 .home-container {
@@ -52,36 +61,20 @@ const posts = (await getCollection('blog'))
     overflow-x: hidden;
 }
 
-.hero {
-    background: var(--hero-bg);
-    padding: 3rem var(--content-padding) 2rem;
-    text-align: center;
-    margin-bottom: 2rem;
+.section-block {
+    padding: 1rem var(--content-padding) var(--section-spacing);
 }
 
-.hero-content {
-    max-width: var(--max-content-width);
-    margin: 0 auto;
+.section-block:first-child {
+    padding-top: calc(5rem + env(safe-area-inset-top, 0px));
 }
 
-.hero h1 {
-    font-size: 2.5rem;
+.section-title {
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 0.5rem;
-    line-height: 1.1;
+    margin-bottom: 1.5rem;
     letter-spacing: -0.02em;
-}
-
-.hero-description {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    margin: 0 auto;
-    line-height: 1.4;
-}
-
-.blog-section {
-    padding: 0 0 var(--section-spacing);
 }
 
 .content-container {
@@ -93,35 +86,64 @@ const posts = (await getCollection('blog'))
     width: 100%;
 }
 
-@media (max-width: 1440px) {
-    :root {
-        --max-content-width: 65rem;
-    }
+.posts-container :global(.grid-container) {
+    padding: 0;
 }
 
-@media (max-width: 1024px) {
-    :root {
-        --max-content-width: 55rem;
-        --content-padding: 1.5rem;
-    }
+.posts-container :global(.blog-grid) {
+    margin: 0;
+}
+
+.post-item {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.4s ease, opacity 0.4s ease;
+}
+
+.post-item.hidden {
+    grid-template-rows: 0fr;
+    opacity: 0;
+}
+
+.post-item > :global(*) {
+    overflow: hidden;
+}
+
+.load-more-btn {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--text-secondary);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.load-more-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+}
+
+.works-container {
+    width: 100%;
 }
 
 @media (max-width: 768px) {
     :root {
         --content-padding: 1rem;
-        --section-spacing: 3rem;
+        --section-spacing: 1.5rem;
     }
 
-    .hero {
-        padding: calc(5rem + env(safe-area-inset-top, 0px)) var(--content-padding) 1.5rem;
+    .section-block:first-child {
+        padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
     }
 
-    .hero h1 {
-        font-size: 2.25rem;
-    }
-
-    .hero-description {
-        font-size: 1.125rem;
+    .section-title {
+        font-size: 1.5rem;
     }
 }
 
@@ -129,11 +151,34 @@ const posts = (await getCollection('blog'))
     :root {
         --text-primary: #ffffff;
         --text-secondary: #a1a1a6;
-        --hero-bg: #1e1e1e;
-    }
-
-    .hero {
-        background: var(--hero-bg);
     }
 }
 </style>
+
+<script>
+    function initLoadMore() {
+        const btn = document.getElementById('load-more');
+        if (!btn) return;
+
+        btn.addEventListener('click', () => {
+            const visible = parseInt(btn.dataset.visible!, 10);
+            const total = parseInt(btn.dataset.total!, 10);
+            const step = parseInt(btn.dataset.step!, 10);
+            const newVisible = Math.min(visible + step, total);
+
+            document.querySelectorAll<HTMLElement>('.post-item').forEach((el) => {
+                const index = parseInt(el.dataset.index!, 10);
+                if (index < newVisible) {
+                    el.classList.remove('hidden');
+                }
+            });
+
+            btn.dataset.visible = String(newVisible);
+            if (newVisible >= total) {
+                btn.remove();
+            }
+        });
+    }
+
+    document.addEventListener('astro:page-load', initLoadMore);
+</script>
