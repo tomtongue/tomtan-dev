@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseView from '../layouts/BaseView.astro';
 import GridView from '../components/GridView.astro';
 import BlogEntries from '../components/BlogEntries.astro';
@@ -10,6 +10,9 @@ const LOAD_MORE_COUNT = 10;
 const posts = (await getCollection('blog'))
     .filter((post) => !post.data.draft)
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+const worksEntry = await getEntry('works', 'index');
+const { Content: WorksContent } = worksEntry ? await worksEntry.render() : { Content: null };
 ---
 
 <BaseView>
@@ -40,7 +43,7 @@ const posts = (await getCollection('blog'))
             <div class="content-container">
                 <h2 class="section-title">Works</h2>
                 <div class="works-container">
-                    <!-- Book publications, podcasts, etc. -->
+                    {WorksContent && <WorksContent />}
                 </div>
             </div>
         </section>
