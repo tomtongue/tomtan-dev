@@ -11,7 +11,7 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
 <nav class="nav-container" id="main-nav">
     <div class="nav-content">
         <a href="/" class="nav-logo">
-            <Icon icon="terminal-window" color="var(--nav-logo-color)" size="1.25em" />
+            <img src="/favicon-64x64.png" alt="tomtan.dev" class="nav-logo-icon" />
             <span class="nav-title">tomtan.dev</span>
         </a>
 
@@ -172,6 +172,14 @@ document.addEventListener('astro:page-load', setupMenu);
     text-decoration: none;
     color: var(--text-primary);
     font-weight: 600;
+}
+
+.nav-logo-icon {
+    width: 2.25em;
+    height: 2.25em;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-right: -0.125em;
 }
 
 .nav-title {
