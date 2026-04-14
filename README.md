@@ -1,21 +1,5 @@
 # tomtan.dev
 
-This is my portfolio built with Astro and hosted on Vercel. The page is based on the [Astro blog template](https://astro.build/themes/details/blog/).
+[![Deployed on Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-deployed-orange?logo=cloudflare)](https://tomtan.dev)
 
-## Test on local
-
-```sh
-$ npm run dev
-
-> tomtana-com@0.0.1 dev
-> astro dev
-
-  🚀  astro  v3.3.0 started in 130ms
-
-  ┃ Local    http://localhost:4322/
-  ┃ Network  use --host to expose
-
-01:41:59 AM [content] Watching src/content/ for changes
-01:41:59 AM [content] Types generated
-01:41:59 AM [astro] update /.astro/types.d.ts
-```
+Personal website and tech blog built with Astro 6, Tailwind CSS 4, and MDX. Covers topics like Apache Iceberg and data engineering. Hosted on Cloudflare Pages at [tomtan.dev](https://tomtan.dev).

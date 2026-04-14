@@ -1,5 +1,5 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseView from '../../layouts/BaseView.astro';
 import ArticleView from '../../layouts/ArticleView.astro';
 import LinkPreview from '../../components/LinkPreview.astro';
@@ -7,14 +7,14 @@ import LinkPreview from '../../components/LinkPreview.astro';
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
-		params: { slug: post.slug },
+		params: { slug: post.id },
 		props: post,
 	}));
 }
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <BaseView title={post.data.title} description={post.data.description}>

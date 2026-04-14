@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import BaseView from '../layouts/BaseView.astro';
 import GridView from '../components/GridView.astro';
 import BlogEntries from '../components/BlogEntries.astro';
@@ -12,7 +12,7 @@ const posts = (await getCollection('blog'))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 
 const worksEntry = await getEntry('works', 'index');
-const { Content: WorksContent } = worksEntry ? await worksEntry.render() : { Content: null };
+const { Content: WorksContent } = worksEntry ? await render(worksEntry) : { Content: null };
 ---
 
 <BaseView>
