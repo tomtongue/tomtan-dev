@@ -11,7 +11,7 @@
     --border-color: #e5e5e5;
     --code-background: #f6f8fa;
     
-    --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    --font-primary: "New York", "Roboto Serif", Georgia, "Times New Roman", serif;
     --font-code: "SF Mono", SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
     --line-height-body: 1.8;
     --line-height-heading: 1.2;

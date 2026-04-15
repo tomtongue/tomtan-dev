@@ -16,6 +16,10 @@ const { title, description } = Astro.props;
 <html lang="en">
     <head>
         <link rel="sitemap" href="/sitemap-index.xml" />
+        <!-- Google Fonts: Roboto Serif (fallback for non-Apple devices) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
         <BaseHead title={title} description={description} />
         <ClientRouter />
     </head>
