@@ -1,50 +1,70 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 
 import FormattedDateUtil from '../components/FormattedDateUtil.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+    headings?: MarkdownHeading[];
+};
 
-const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, tags, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<article class="content">
-    <h1>{title}</h1>
-    <div class="article-meta">
-        <FormattedDateUtil date={pubDate} />
-        <div class="article-tags">
-            {
-                tags.map((tag) => (
-                <a href={`/tags/${tag}`} class="article-tag">
-                    {tag}
-                </a>))
-            }
+<div class="article-layout">
+    <article class="content">
+        <h1>{title}</h1>
+        <div class="article-meta">
+            <FormattedDateUtil date={pubDate} />
+            <div class="article-tags">
+                {
+                    tags.map((tag) => (
+                    <a href={`/tags/${tag}`} class="article-tag">
+                        {tag}
+                    </a>))
+                }
+            </div>
         </div>
-    </div>
+        {
+            updatedDate && (
+                <div class="last-updated-on">
+                    Last updated on <FormattedDateUtil date={updatedDate} />
+                </div>
+            )
+        }
+        {
+            heroImage && (
+                <div class="hero-image-container">
+                    <img
+                        src={heroImage}
+                        alt={title}
+                        class="hero-image"
+                        loading="eager"
+                    />
+                </div>
+            )
+        }
+        <slot />
+    </article>
     {
-        updatedDate && (
-            <div class="last-updated-on">
-                Last updated on <FormattedDateUtil date={updatedDate} />
-            </div>
+        tocHeadings.length > 0 && (
+            <aside class="toc-aside">
+                <div class="toc-sticky">
+                    <TableOfContents headings={headings} />
+                </div>
+            </aside>
         )
     }
-    {
-        heroImage && (
-            <div class="hero-image-container">
-                <img
-                    src={heroImage}
-                    alt={title}
-                    class="hero-image"
-                    loading="eager"
-                />
-            </div>
-        )
-    }
-    <slot />
-</article>
+</div>
 
 <style>
+.article-layout {
+    display: block;
+}
+
 .content {
     --content-width: 65rem;
     --content-padding: 3rem;
@@ -67,7 +87,59 @@ const { title, description, tags, pubDate, updatedDate, heroImage } = Astro.prop
     color: var(--text-color);
 }
 
-/* h1のマージン調整 */
+.content :global(h2),
+.content :global(h3) {
+    scroll-margin-top: calc(4rem + 1rem + env(safe-area-inset-top, 0px));
+}
+
+.toc-aside {
+    display: none;
+}
+
+@media (min-width: 1500px) {
+    /* Three-column grid with a phantom left column the same width as the TOC,
+       so the article column is visually centered in the viewport. */
+    .article-layout {
+        display: grid;
+        grid-template-columns: 14rem minmax(0, 55rem) 14rem;
+        column-gap: 2rem;
+        justify-content: center;
+        align-items: start;
+        padding: 0 1.5rem;
+    }
+
+    .article-layout > .content {
+        grid-column: 2;
+        max-width: none;
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .toc-aside {
+        display: block;
+        grid-column: 3;
+        padding-top: calc(4rem + 2rem + env(safe-area-inset-top, 0px));
+        align-self: stretch;
+    }
+
+    .toc-sticky {
+        position: sticky;
+        top: calc(4rem + 1rem);
+        max-height: calc(100vh - 4rem - 2rem);
+        overflow-y: auto;
+        padding-right: 0.25rem;
+    }
+}
+
+@media (min-width: 1700px) {
+    .article-layout {
+        grid-template-columns: 16rem minmax(0, 65rem) 16rem;
+        column-gap: 3rem;
+    }
+}
+
+/* h1 margin adjustment */
 .content h1 {
     font-size: 3rem;
     font-weight: 700;
