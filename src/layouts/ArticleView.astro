@@ -4,6 +4,7 @@ import type { MarkdownHeading } from 'astro';
 
 import FormattedDateUtil from '../components/FormattedDateUtil.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import Icon from '../components/Icon.astro';
 
 
 type Props = CollectionEntry<'blog'>['data'] & {
@@ -51,11 +52,23 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     </article>
     {
         tocHeadings.length > 0 && (
-            <aside class="toc-aside">
-                <div class="toc-sticky">
-                    <TableOfContents headings={headings} />
-                </div>
-            </aside>
+            <>
+                <button
+                    type="button"
+                    class="toc-toggle"
+                    aria-label="Toggle table of contents"
+                    aria-controls="toc-panel"
+                    aria-expanded="false"
+                    data-toc-toggle
+                >
+                    <Icon icon="list" size="1.25rem" />
+                </button>
+                <aside class="toc-aside" id="toc-panel">
+                    <div class="toc-sticky">
+                        <TableOfContents headings={headings} />
+                    </div>
+                </aside>
+            </>
         )
     }
 </div>
@@ -63,6 +76,24 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 <style>
 .article-layout {
     display: block;
+}
+
+/* Smooth morph when the TOC is toggled. View transition snapshots the
+   article and TOC, then animates between the closed and open layouts. */
+.article-layout > .content {
+    view-transition-name: article-main;
+}
+
+.article-layout > .toc-aside {
+    view-transition-name: article-toc;
+}
+
+::view-transition-old(article-main),
+::view-transition-new(article-main),
+::view-transition-old(article-toc),
+::view-transition-new(article-toc) {
+    animation-duration: 0.28s;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .content {
@@ -94,6 +125,94 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 .toc-aside {
     display: none;
+}
+
+.toc-toggle {
+    display: none;
+    position: fixed;
+    top: calc(4rem + 0.75rem + env(safe-area-inset-top, 0px));
+    right: 1rem;
+    z-index: 20;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--toc-toggle-border, #e5e7eb);
+    background: var(--toc-toggle-bg, #f6f8fa);
+    color: var(--toc-toggle-fg, #333333);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.toc-toggle:hover {
+    background: var(--toc-toggle-bg-hover, #eef1f5);
+}
+
+.toc-toggle[aria-expanded="true"] {
+    background: var(--toc-active, #0070c9);
+    border-color: var(--toc-active, #0070c9);
+    color: #ffffff;
+}
+
+@media (min-width: 900px) and (max-width: 1499px) {
+    .toc-toggle {
+        display: inline-flex;
+    }
+
+    /* When the user opens the TOC on a medium-width viewport, switch to a
+       two-column push layout. The pair is centered together so that wider
+       viewports inside this range don't right-align the content. */
+    .article-layout[data-toc-open="true"] {
+        display: grid;
+        grid-template-columns: minmax(0, 55rem) 14rem;
+        column-gap: 2rem;
+        justify-content: center;
+        align-items: start;
+        padding: 0 1.5rem;
+    }
+
+    .article-layout[data-toc-open="true"] > .content {
+        grid-column: 1;
+        max-width: none;
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .article-layout[data-toc-open="true"] > .toc-aside {
+        display: block;
+        grid-column: 2;
+        padding-top: calc(4rem + 2rem + env(safe-area-inset-top, 0px));
+        align-self: stretch;
+    }
+
+    .article-layout[data-toc-open="true"] .toc-sticky {
+        position: sticky;
+        top: calc(4rem + 1rem);
+        max-height: calc(100vh - 4rem - 2rem);
+        overflow-y: auto;
+        padding-right: 0.25rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .toc-toggle {
+        background: #303031;
+        border-color: #424242;
+        color: #e0e0e0;
+    }
+
+    .toc-toggle:hover {
+        background: #3a3a3b;
+    }
+
+    .toc-toggle[aria-expanded="true"] {
+        background: #4ba1ff;
+        border-color: #4ba1ff;
+        color: #ffffff;
+    }
 }
 
 @media (min-width: 1500px) {
@@ -327,5 +446,71 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     .hero-image-container {
         page-break-inside: avoid;
     }
+
+    .toc-toggle,
+    .toc-aside {
+        display: none !important;
+    }
 }
 </style>
+
+<script>
+    const STORAGE_KEY = 'tocOpen';
+
+    const readStored = (): boolean => {
+        try {
+            return localStorage.getItem(STORAGE_KEY) === 'true';
+        } catch {
+            return false;
+        }
+    };
+
+    const writeStored = (open: boolean) => {
+        try {
+            localStorage.setItem(STORAGE_KEY, open ? 'true' : 'false');
+        } catch {
+            /* ignore quota / privacy mode errors */
+        }
+    };
+
+    const applyState = (open: boolean) => {
+        document.querySelectorAll<HTMLElement>('.article-layout').forEach((el) => {
+            el.setAttribute('data-toc-open', open ? 'true' : 'false');
+        });
+        document.querySelectorAll<HTMLButtonElement>('[data-toc-toggle]').forEach((btn) => {
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+    };
+
+    const syncFromStorage = () => applyState(readStored());
+
+    type ViewTransitionDoc = Document & {
+        startViewTransition?: (cb: () => void) => unknown;
+    };
+
+    const runWithTransition = (cb: () => void) => {
+        const vt = (document as ViewTransitionDoc).startViewTransition;
+        if (typeof vt === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            vt.call(document, cb);
+        } else {
+            cb();
+        }
+    };
+
+    if (!document.documentElement.hasAttribute('data-toc-listener')) {
+        document.documentElement.setAttribute('data-toc-listener', '');
+        document.addEventListener('click', (e) => {
+            const btn = (e.target as HTMLElement | null)?.closest('[data-toc-toggle]');
+            if (!btn) return;
+            const layout = document.querySelector<HTMLElement>('.article-layout');
+            const next = layout?.getAttribute('data-toc-open') !== 'true';
+            runWithTransition(() => {
+                applyState(next);
+                writeStored(next);
+            });
+        });
+    }
+
+    syncFromStorage();
+    document.addEventListener('astro:page-load', syncFromStorage);
+</script>
