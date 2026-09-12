@@ -1,18 +1,18 @@
 ---
 import '../styles/custom.css';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 interface Props {
-	title?: string | undefined;
-	description?: string | undefined;
-	image?: string;
+	title?: string;
+	description?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const image = new URL('/android-chrome-512x512.png', Astro.site);
 
 const { 
-	title = 'tomtan.dev', 
-	description = 'tomtan personal website', 
-	image = 'tomtana_com_icon.png' 
+	title = SITE_TITLE,
+	description = SITE_DESCRIPTION,
 } = Astro.props;
 ---
 
@@ -37,31 +37,10 @@ const {
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta property="og:image" content={image} />
 
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
-
-<script is:inline>
-	// This code is inlined in the head to make dark mode instant & blocking.
-	const getThemePreference = () => {
-		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-			return localStorage.getItem('theme');
-		}
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-	};
-	const isDark = getThemePreference() === 'dark';
-	document.documentElement.classList[isDark ? 'add' : 'remove']('theme-dark');
-
-	if (typeof localStorage !== 'undefined') {
-		const observer = new MutationObserver(() => {
-			const isDark = document.documentElement.classList.contains('theme-dark');
-			localStorage.setItem('theme', isDark ? 'dark' : 'light');
-		});
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-	}
-</script>
-
+<meta property="twitter:image" content={image} />
