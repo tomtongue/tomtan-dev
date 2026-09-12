@@ -6,9 +6,6 @@ heroImage: '/blog/2024-01-30.png'
 tags: ['iceberg']
 ---
 
-import LinkPreview from '../../components/LinkPreview.astro';
-export const components = { a: LinkPreview };
-
 From Iceberg 1.4.0, the `fast_forward` procedure is supported (see the [release note](https://iceberg.apache.org/releases/#140-release)). Using the procedure with the branching feature, you can check your table records before  publishing records to data consumers. Through this post, we look when and how to run the procedure.
 
 ## Scenario
@@ -434,4 +431,3 @@ $ spark-shell/spark-submit --master yarn --deploy-mode client \
 >     "metadata-file" : "s3://bucket/path/metadata/00002-585ebf63-98f2-4ca8-ab35-d446cb362cb6.metadata.json"
 >   } ]
 ```
-
