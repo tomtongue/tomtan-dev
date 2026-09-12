@@ -7,8 +7,7 @@ import BlogEntries from '../components/BlogEntries.astro';
 const INITIAL_COUNT = 3;
 const LOAD_MORE_COUNT = 10;
 
-const posts = (await getCollection('blog'))
-    .filter((post) => !post.data.draft)
+const posts = (await getCollection('blog', ({ data }) => data.draft !== true))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 
 const worksEntry = await getEntry('works', 'index');

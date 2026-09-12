@@ -6,6 +6,12 @@ A personal blog website built with AstroJS for publishing blog posts.
 
 Blog posts are written in MDX, with reusable Astro components and layouts for presentation and Tailwind CSS for styling.
 
+## Draft Posts
+
+Set `draft: true` in a post's frontmatter to exclude it from production builds, post lists, tags, RSS, and the sitemap. Drafts can still be previewed at their `/blog/<slug>/` URL with `npm run dev`. Omit `draft` or set it to `false` to publish the post.
+
+Files in `public/` are always copied to `dist/`, including images referenced by drafts.
+
 ## Local Development
 
 Use the Node.js version specified in [`.node-version`](.node-version). Run the following commands from the repository root.

@@ -5,7 +5,7 @@ import ArticleView from '../../layouts/ArticleView.astro';
 import LinkPreview from '../../components/LinkPreview.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || data.draft !== true);
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,

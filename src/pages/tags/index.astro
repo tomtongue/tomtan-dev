@@ -3,8 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseView from '../../layouts/BaseView.astro';
 import Icon from '../../components/Icon.astro';
 
-const allPosts = await getCollection('blog');
-const nonDraftPosts = allPosts.filter(post => !post.data.draft);
+const nonDraftPosts = await getCollection('blog', ({ data }) => data.draft !== true);
 
 const tagCounts = nonDraftPosts.reduce((acc, post) => {
     post.data.tags.forEach(tag => {
