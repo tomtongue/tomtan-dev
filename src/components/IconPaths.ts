@@ -1,14 +1,8 @@
 /**
  * Icons adapted from https://phosphoricons.com/
- *
- * Want to add more?
- * 1. Find the icon you want on Phosphor Icons.
- * 2. Click “Copy SVG”.
- * 3. Paste the SVG code in your editor.
- * 4. Remove the `<svg>` wrapper so you only have elements like `<path>`, `<circle>`, `<rect>` etc.
- * 5. Remove any `stroke="#000000"` attributes
- * 6. Replace any `fill="#000000"` attributes with `stroke="none"`
- *    (or add `stroke="none"` on shapes with no `fill` or `stroke` specified).
+ * Store only SVG child elements. Remove stroke="#000000" and replace
+ * fill="#000000" with stroke="none" to inherit Icon.astro's color.
+ * Add stroke="none" to filled shapes that specify neither fill nor stroke.
  */
 export const iconPaths = {
 	'terminal-window': `<path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" d="m80 96 40 32-40 32m56 0h40"/><rect width="192" height="160" x="32" y="48" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="16.97" rx="8.5"/>`,

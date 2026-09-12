@@ -3,11 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseView from '../../layouts/BaseView.astro';
 import Icon from '../../components/Icon.astro';
 
-// Get all unique tags and count posts for each
 const allPosts = await getCollection('blog');
 const nonDraftPosts = allPosts.filter(post => !post.data.draft);
 
-// Create a map of tag -> count of posts
 const tagCounts = nonDraftPosts.reduce((acc, post) => {
     post.data.tags.forEach(tag => {
         acc.set(tag, (acc.get(tag) || 0) + 1);
@@ -15,7 +13,6 @@ const tagCounts = nonDraftPosts.reduce((acc, post) => {
     return acc;
 }, new Map());
 
-// Convert to array and sort alphabetically
 const tags = [...tagCounts.entries()]
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([tag, count]) => ({ tag, count }));

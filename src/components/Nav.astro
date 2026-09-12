@@ -49,10 +49,9 @@ const iconLinks: { label: string; href: string; icon: keyof typeof iconPaths }[]
 
 <script>
 
-// Show Navigation bar
 let lastScroll = 0;
 const scrollThreshold = 50;
-const scrollDeltaThreshold = 5; // Minimum scroll difference to trigger a change
+const scrollDeltaThreshold = 5;
 
 function handleScroll() {
     const nav = document.getElementById('main-nav');
@@ -61,19 +60,15 @@ function handleScroll() {
     const currentScroll = window.scrollY;
     const scrollDelta = Math.abs(currentScroll - lastScroll);
 
-    // Only process if scroll difference is significant
     if (scrollDelta > scrollDeltaThreshold) {
-        // At the top of the page
         if (currentScroll <= 10) {
             nav.classList.remove('nav-hidden');
             nav.classList.remove('nav-scrolled');
         }
-        // Scrolling DOWN (content moves up, increasing scroll position) - HIDE navbar
         else if (currentScroll > lastScroll && currentScroll > scrollThreshold) {
             nav.classList.add('nav-hidden');
             nav.classList.add('nav-scrolled');
         }
-        // Scrolling UP (content moves down, decreasing scroll position) - SHOW navbar
         else if (currentScroll < lastScroll) {
             nav.classList.remove('nav-hidden');
             nav.classList.add('nav-scrolled');
@@ -83,7 +78,6 @@ function handleScroll() {
     }
 }
 
-// Improved scroll handling with better debouncing
 let scrollTimeout: number | undefined;
 window.addEventListener('scroll', () => {
     clearTimeout(scrollTimeout);
@@ -109,20 +103,16 @@ function setupMenu() {
     const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
 
     if (menuButton && mobileMenu) {
-        // Remove existing listeners to avoid duplicates
         menuButton.removeEventListener('click', toggleMenu);
         menuButton.removeEventListener('touchstart', toggleMenu);
 
-        // Add listeners
         menuButton.addEventListener('click', toggleMenu);
         menuButton.addEventListener('touchstart', toggleMenu, { passive: false });
     }
 }
 
-// Setup on initial page load
 setupMenu();
 
-// Setup on every page navigation (for ClientRouter)
 document.addEventListener('astro:page-load', setupMenu);
 </script>
 

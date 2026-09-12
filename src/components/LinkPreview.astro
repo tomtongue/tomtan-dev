@@ -6,27 +6,20 @@ interface Props {
 
 const { href, children } = Astro.props;
 
-// Get the text content of the link
 const linkText = (await Astro.slots.render('default')).replace(/<[^>]*>/g, '').trim();
 
-// Show preview ONLY for bare URLs (where linkText === href)
-// Don't show preview for links with custom text (inline links like [text](url))
 const isBareUrl = linkText === href || linkText === href.replace(/^https?:\/\//, '') || linkText === href.replace(/^https?:\/\/www\./, '');
 const hasCustomText = linkText && linkText.length > 0 && !isBareUrl;
 
-// Show preview if it's a bare URL and doesn't have custom text
 const shouldShowPreviewCard = isBareUrl && !hasCustomText;
 
-// Check if it's an external link
 const isExternalLink = href && href.startsWith('http');
 
-// Check if it's a GitHub file link
 const isGitHubFileLink = href && (
     href.includes('github.com') &&
     (href.includes('/blob/') || href.includes('/tree/'))
 );
 
-// Parse GitHub URL to extract metadata
 function parseGitHubUrl(url: string) {
     try {
         const urlObj = new URL(url);
@@ -36,7 +29,7 @@ function parseGitHubUrl(url: string) {
         if (pathParts.length >= 5) {
             const owner = pathParts[1];
             const repo = pathParts[2];
-            const type = pathParts[3]; // blob or tree
+            const type = pathParts[3];
             const branch = pathParts[4];
             const filePath = pathParts.slice(5).join('/');
             const lineNumber = urlObj.hash ? urlObj.hash.substring(1) : '';
@@ -56,20 +49,16 @@ function parseGitHubUrl(url: string) {
     return null;
 }
 
-// Parse URL to extract metadata for non-GitHub links
 function parseUrl(url: string) {
     try {
         const urlObj = new URL(url);
         const domain = urlObj.hostname.replace('www.', '');
         const path = urlObj.pathname + urlObj.search + urlObj.hash;
 
-        // Construct favicon URL using Google's favicon service
         const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
 
-        // Truncate domain if too long (more than 30 characters)
         const displayDomain = domain.length > 30 ? domain.substring(0, 27) + '...' : domain;
 
-        // Create a readable path display
         const displayPath = path.length > 60 ? path.substring(0, 57) + '...' : path;
 
         return {
@@ -88,7 +77,6 @@ function parseUrl(url: string) {
 const githubData = isGitHubFileLink ? parseGitHubUrl(href) : null;
 const linkData = isExternalLink && !isGitHubFileLink ? parseUrl(href) : null;
 
-// Only show preview for links with no text content (not inline links)
 const shouldShowPreview = shouldShowPreviewCard;
 ---
 
@@ -173,7 +161,6 @@ const shouldShowPreview = shouldShowPreviewCard;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* GitHub card: icon and content side by side */
 .github-card {
     display: flex;
     align-items: flex-start;
@@ -189,7 +176,6 @@ const shouldShowPreview = shouldShowPreviewCard;
     gap: 0.25rem;
 }
 
-/* General card: icon and content side by side */
 .general-card {
     display: flex;
     align-items: flex-start;
