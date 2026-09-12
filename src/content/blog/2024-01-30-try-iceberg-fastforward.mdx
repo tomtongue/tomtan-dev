@@ -48,31 +48,6 @@ spark.sql(s"SELECT * FROM hive_catalog.db.tbl").show(false)
 |1  |tom |2024-01-28|
 +---+----+----------+
 */
-
-// spark.sql("DESCRIBE EXTENDED hive_catalog.hivedb.ice_ff").show(false)
-/*
-+----------------------------+----------------------------------------------------------------------------------------------------------------------+-------+
-|col_name                    |data_type                                                                                                             |comment|
-+----------------------------+----------------------------------------------------------------------------------------------------------------------+-------+
-|id                          |int                                                                                                                   |NULL   |
-|name                        |string                                                                                                                |NULL   |
-|                            |                                                                                                                      |       |
-|# Metadata Columns          |                                                                                                                      |       |
-|_spec_id                    |int                                                                                                                   |       |
-|_partition                  |struct<>                                                                                                              |       |
-|_file                       |string                                                                                                                |       |
-|_pos                        |bigint                                                                                                                |       |
-|_deleted                    |boolean                                                                                                               |       |
-|                            |                                                                                                                      |       |
-|# Detailed Table Information|                                                                                                                      |       |
-|Name                        |hive_catalog.db.tbl                                                                                                   |       |
-|Type                        |MANAGED                                                                                                               |       |
-|Location                    |s3://bucket/path/                                                                                                     |       |
-|Provider                    |iceberg                                                                                                               |       |
-|Owner                       |hadoop                                                                                                                |       |
-|Table Properties            |[current-snapshot-id=1760975580047100766,format=iceberg/parquet,format-version=2,write.parquet.compression-codec=zstd]|       |
-+----------------------------+----------------------------------------------------------------------------------------------------------------------+-------+
-*/
 ```
 
 
@@ -200,7 +175,6 @@ Change the current branch to `audit`. You can check the current branch with the 
 ```scala
 spark.sql("SET spark.wap.branch = audit")
 
-// Check the current branch
 spark.sql("SET spark.wap.branch").show(false)
 /*
 +----------------+-----+
