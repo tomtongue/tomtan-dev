@@ -11,7 +11,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
     headings?: MarkdownHeading[];
 };
 
-const { title, description, tags, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
+const { title, tags, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
@@ -101,10 +101,8 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     --content-padding: 3rem;
     --text-color: #333333;
     --heading-color: #000000;
-    --link-color: #0070c9;
     --code-background: #f6f8fa;
     --background: #f6f8fa;
-    --blockquote-border: #e0e0e0;
     --table-border: #e0e0e0;
     --nav-height: 4rem;
     --safe-padding-top: calc(var(--nav-height) + 2rem + env(safe-area-inset-top, 0px));
@@ -302,10 +300,6 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     line-height: 1.4;
 }
 
-.content :global(pre code) {
-    line-height: 1.4;
-}
-
 .content :global(code) {
     line-height: 1.4;
 }
@@ -392,16 +386,9 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     .content {
         --text-color: #e0e0e0;
         --heading-color: #ffffff;
-        --link-color: #4ba1ff;
         --code-background: #303031;
-        --blockquote-border: #424242;
         --table-border: #424242;
         --background: #303031;
-    }
-
-    .tags {
-        background: var(--code-background);
-        color: var(--text-color);
     }
 }
 

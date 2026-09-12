@@ -84,7 +84,7 @@ import Icon from '../components/Icon.astro';
         flex-wrap: wrap;
     }
 
-    .primary-button, .secondary-button {
+    .primary-button {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -103,17 +103,6 @@ import Icon from '../components/Icon.astro';
 
     .primary-button:hover {
         background-color: var(--secondary-color);
-        transform: translateY(-2px);
-    }
-
-    .secondary-button {
-        background-color: var(--surface-color);
-        color: var(--text-primary);
-        border: 1px solid var(--border-color);
-    }
-
-    .secondary-button:hover {
-        background-color: var(--background-color);
         transform: translateY(-2px);
     }
 
@@ -146,7 +135,7 @@ import Icon from '../components/Icon.astro';
             gap: 0.75rem;
         }
 
-        .primary-button, .secondary-button {
+        .primary-button {
             width: 100%;
         }
     }
@@ -157,7 +146,7 @@ import Icon from '../components/Icon.astro';
             transform: none;
         }
 
-        .primary-button:hover, .secondary-button:hover {
+        .primary-button:hover {
             transform: none;
         }
     }

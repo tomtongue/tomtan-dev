@@ -1,17 +1,13 @@
 ---
 interface Props {
     href: string;
-    children?: any;
 }
 
-const { href, children } = Astro.props;
+const { href } = Astro.props;
 
 const linkText = (await Astro.slots.render('default')).replace(/<[^>]*>/g, '').trim();
 
 const isBareUrl = linkText === href || linkText === href.replace(/^https?:\/\//, '') || linkText === href.replace(/^https?:\/\/www\./, '');
-const hasCustomText = linkText && linkText.length > 0 && !isBareUrl;
-
-const shouldShowPreviewCard = isBareUrl && !hasCustomText;
 
 const isExternalLink = href && href.startsWith('http');
 
@@ -29,7 +25,6 @@ function parseGitHubUrl(url: string) {
         if (pathParts.length >= 5) {
             const owner = pathParts[1];
             const repo = pathParts[2];
-            const type = pathParts[3];
             const branch = pathParts[4];
             const filePath = pathParts.slice(5).join('/');
             const lineNumber = urlObj.hash ? urlObj.hash.substring(1) : '';
@@ -43,7 +38,7 @@ function parseGitHubUrl(url: string) {
                 fullPath: `${owner}/${repo}`,
             };
         }
-    } catch (e) {
+    } catch {
         return null;
     }
     return null;
@@ -64,12 +59,10 @@ function parseUrl(url: string) {
         return {
             domain,
             displayDomain,
-            fullUrl: url,
-            path,
             displayPath,
             faviconUrl,
         };
-    } catch (e) {
+    } catch {
         return null;
     }
 }
@@ -77,10 +70,9 @@ function parseUrl(url: string) {
 const githubData = isGitHubFileLink ? parseGitHubUrl(href) : null;
 const linkData = isExternalLink && !isGitHubFileLink ? parseUrl(href) : null;
 
-const shouldShowPreview = shouldShowPreviewCard;
 ---
 
-{isGitHubFileLink && githubData && shouldShowPreview ? (
+{isGitHubFileLink && githubData && isBareUrl ? (
     <div class="link-preview">
         <a href={href} class="preview-card github-card" target="_blank" rel="noopener noreferrer">
             <div class="preview-icon">
@@ -100,7 +92,7 @@ const shouldShowPreview = shouldShowPreviewCard;
             </div>
         </a>
     </div>
-) : linkData && shouldShowPreview ? (
+) : linkData && isBareUrl ? (
     <div class="link-preview">
         <a href={href} class="preview-card general-card" target="_blank" rel="noopener noreferrer">
             <div class="preview-icon">
@@ -161,31 +153,11 @@ const shouldShowPreview = shouldShowPreviewCard;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.github-card {
-    display: flex;
-    align-items: flex-start;
-}
-
-.github-card .preview-icon {
+.preview-card .preview-icon {
     margin-top: 0.125rem;
 }
 
-.github-card .preview-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.general-card {
-    display: flex;
-    align-items: flex-start;
-}
-
-.general-card .preview-icon {
-    margin-top: 0.125rem;
-}
-
-.general-card .preview-content {
+.preview-card .preview-content {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
