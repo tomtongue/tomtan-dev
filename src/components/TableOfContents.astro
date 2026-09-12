@@ -6,15 +6,14 @@ interface Props {
 }
 
 const { headings } = Astro.props;
-const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 {
-    items.length > 0 && (
+    headings.length > 0 && (
         <nav class="toc" aria-label="On this page">
             <p class="toc-title">On this page</p>
             <ul class="toc-list">
-                {items.map((h) => (
+                {headings.map((h) => (
                     <li class={`toc-item toc-depth-${h.depth}`}>
                         <a href={`#${h.slug}`}>{h.text}</a>
                     </li>
@@ -92,7 +91,10 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 </style>
 
 <script>
+    let observer: IntersectionObserver | undefined;
+
     const initToc = () => {
+        observer?.disconnect();
         const links = Array.from(
             document.querySelectorAll<HTMLAnchorElement>('.toc-item > a'),
         );
@@ -117,7 +119,7 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
             itemBySlug.get(id)?.classList.add('is-active');
         };
 
-        const observer = new IntersectionObserver(
+        observer = new IntersectionObserver(
             (entries) => {
                 const visible = entries.filter((e) => e.isIntersecting);
                 if (visible.length === 0) return;
@@ -129,9 +131,9 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
             { rootMargin: '-80px 0px -70% 0px', threshold: 0 },
         );
 
-        headingEls.forEach((h) => observer.observe(h));
+        headingEls.forEach((h) => observer!.observe(h));
     };
 
-    initToc();
+    document.addEventListener('astro:before-swap', () => observer?.disconnect());
     document.addEventListener('astro:page-load', initToc);
 </script>

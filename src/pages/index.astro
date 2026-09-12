@@ -24,14 +24,14 @@ const { Content: WorksContent } = worksEntry ? await render(worksEntry) : { Cont
                     <GridView>
                         {
                             posts.map((post, i) => (
-                                <div class:list={['post-item', { hidden: i >= INITIAL_COUNT }]} data-index={i}>
+                                <div class:list={['post-item', { hidden: i >= INITIAL_COUNT }]}>
                                     <BlogEntries post={post} />
                                 </div>
                             ))
                         }
                     </GridView>
                     {posts.length > INITIAL_COUNT && (
-                        <button id="load-more" class="load-more-btn" data-visible={INITIAL_COUNT} data-total={posts.length} data-step={LOAD_MORE_COUNT}>
+                        <button id="load-more" class="load-more-btn" data-step={LOAD_MORE_COUNT}>
                             Show older posts
                         </button>
                     )}
@@ -164,20 +164,12 @@ const { Content: WorksContent } = worksEntry ? await render(worksEntry) : { Cont
         if (!btn) return;
 
         btn.addEventListener('click', () => {
-            const visible = parseInt(btn.dataset.visible!, 10);
-            const total = parseInt(btn.dataset.total!, 10);
-            const step = parseInt(btn.dataset.step!, 10);
-            const newVisible = Math.min(visible + step, total);
-
-            document.querySelectorAll<HTMLElement>('.post-item').forEach((el) => {
-                const index = parseInt(el.dataset.index!, 10);
-                if (index < newVisible) {
-                    el.classList.remove('hidden');
-                }
+            const hiddenPosts = Array.from(document.querySelectorAll('.post-item.hidden'));
+            const step = Number(btn.dataset.step);
+            hiddenPosts.slice(0, step).forEach((post) => {
+                post.classList.remove('hidden');
             });
-
-            btn.dataset.visible = String(newVisible);
-            if (newVisible >= total) {
+            if (hiddenPosts.length <= step) {
                 btn.remove();
             }
         });

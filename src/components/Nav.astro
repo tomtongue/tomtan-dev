@@ -99,19 +99,8 @@ function toggleMenu(event: Event) {
 }
 
 function setupMenu() {
-    const menuButton = document.querySelector('.mobile-menu-button');
-    const mobileMenu = document.querySelector('.mobile-menu') as HTMLElement | null;
-
-    if (menuButton && mobileMenu) {
-        menuButton.removeEventListener('click', toggleMenu);
-        menuButton.removeEventListener('touchstart', toggleMenu);
-
-        menuButton.addEventListener('click', toggleMenu);
-        menuButton.addEventListener('touchstart', toggleMenu, { passive: false });
-    }
+    document.querySelector('.mobile-menu-button')?.addEventListener('click', toggleMenu);
 }
-
-setupMenu();
 
 document.addEventListener('astro:page-load', setupMenu);
 </script>
@@ -199,15 +188,13 @@ document.addEventListener('astro:page-load', setupMenu);
     border-radius: 0.5rem;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover {
     color: var(--text-primary);
     background-color: rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
-    .nav-link:hover,
-    .nav-link.active {
+    .nav-link:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
 }
@@ -352,8 +339,7 @@ document.addEventListener('astro:page-load', setupMenu);
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .nav-container,
-    .nav-link::after {
+    .nav-container {
         transition: none;
     }
 }

@@ -65,7 +65,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
                 </button>
                 <aside class="toc-aside" id="toc-panel">
                     <div class="toc-sticky">
-                        <TableOfContents headings={headings} />
+                        <TableOfContents headings={tocHeadings} />
                     </div>
                 </aside>
             </>
@@ -483,20 +483,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         }
     };
 
-    if (!document.documentElement.hasAttribute('data-toc-listener')) {
-        document.documentElement.setAttribute('data-toc-listener', '');
-        document.addEventListener('click', (e) => {
-            const btn = (e.target as HTMLElement | null)?.closest('[data-toc-toggle]');
-            if (!btn) return;
-            const layout = document.querySelector<HTMLElement>('.article-layout');
-            const next = layout?.getAttribute('data-toc-open') !== 'true';
-            runWithTransition(() => {
-                applyState(next);
-                writeStored(next);
-            });
+    document.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement | null)?.closest('[data-toc-toggle]');
+        if (!btn) return;
+        const layout = document.querySelector<HTMLElement>('.article-layout');
+        const next = layout?.getAttribute('data-toc-open') !== 'true';
+        runWithTransition(() => {
+            applyState(next);
+            writeStored(next);
         });
-    }
+    });
 
-    syncFromStorage();
     document.addEventListener('astro:page-load', syncFromStorage);
 </script>
