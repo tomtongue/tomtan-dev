@@ -13,9 +13,7 @@
     "@astrojs/mdx": "^8.0.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.2",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^7.3.2",
-    "tailwindcss": "^4.2.2"
+    "astro": "^7.3.2"
   },
   "overrides": {
     "esbuild": "^0.28.1"

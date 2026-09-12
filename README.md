@@ -4,7 +4,7 @@
 
 A personal blog website built with AstroJS for publishing blog posts.
 
-Blog posts are written in MDX, with reusable Astro components and layouts for presentation and Tailwind CSS for styling.
+Blog posts are written in MDX, with reusable Astro components and layouts for presentation.
 
 ## Draft Posts
 
