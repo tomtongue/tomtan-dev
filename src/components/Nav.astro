@@ -146,12 +146,18 @@ document.addEventListener('astro:page-load', setupMenu);
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: saturate(180%) blur(40px);
-    -webkit-backdrop-filter: saturate(180%) blur(40px);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+        rgba(245, 245, 247, 0.38);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) contrast(105%);
+    backdrop-filter: blur(24px) saturate(180%) contrast(105%);
     border-radius: 9999px;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.72),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+        0 8px 24px rgba(31, 35, 48, 0.12),
+        0 2px 6px rgba(31, 35, 48, 0.08);
 }
 
 .nav-logo {
@@ -244,13 +250,18 @@ document.addEventListener('astro:page-load', setupMenu);
     top: calc(100% + 0.5rem);
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.38)),
+        rgba(245, 245, 247, 0.48);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) contrast(105%);
+    backdrop-filter: blur(24px) saturate(180%) contrast(105%);
     padding: 1rem 1.5rem;
     border-radius: 1.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+        0 12px 32px rgba(31, 35, 48, 0.14);
 }
 
 .sr-only {
@@ -317,14 +328,26 @@ document.addEventListener('astro:page-load', setupMenu);
 
 @media (prefers-color-scheme: dark) {
     .nav-content {
-        background-color: rgba(30, 30, 30, 0.7);
-        border-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.4);
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.025)),
+            rgba(24, 24, 26, 0.46);
+        border-color: rgba(255, 255, 255, 0.16);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.14),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+            0 10px 28px rgba(0, 0, 0, 0.34),
+            0 2px 8px rgba(0, 0, 0, 0.28);
     }
 
     .mobile-menu {
-        background-color: rgba(30, 30, 30, 0.9);
-        border-color: rgba(255, 255, 255, 0.08);
+        background:
+            linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.025)),
+            rgba(24, 24, 26, 0.56);
+        border-color: rgba(255, 255, 255, 0.16);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.14),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+            0 14px 36px rgba(0, 0, 0, 0.4);
     }
 }
 
