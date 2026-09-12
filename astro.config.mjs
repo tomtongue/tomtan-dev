@@ -6,10 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
     site: 'https://tomtan.dev',
     integrations: [
-        mdx({
-            remarkPlugins: [],
-            rehypePlugins: [],
-        }),
+        mdx(),
         sitemap(),
     ],
     vite: {
